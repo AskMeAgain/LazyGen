@@ -7,10 +7,6 @@ import lombok.Value;
 @Builder
 public class Outputs {
 
-  String a;
-  String b;
-  String c;
-
   InnerOutput innerOutput;
   AnotherInnerOutput anotherInnerOutput;
 
