@@ -9,5 +9,8 @@ public class TestClass {
     var map = mapper.map(new Inputs("a", "b"));
     System.out.println("Result:" + map.getA());
     System.out.println("Result:" + map.getC());
+    System.out.println("Result:" + map.getInnerOutput().getD());
+    System.out.println("Result:" + map.getInnerOutput().getE());
+    System.out.println("Result:" + map.getInnerOutput().getF());
   }
 }

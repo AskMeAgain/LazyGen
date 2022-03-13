@@ -35,24 +35,24 @@ public class LazyProcessor extends AbstractProcessor {
       out.println("""
           package io.github.askmeagain.mapstructcalculator;
             
-            import org.mapstruct.Mapper;
-            import org.mapstruct.Named;
-            
-            @Mapper
-            public abstract class PseudoGeneratedCalculator extends Calculator {
-            
-              private String calculateStuff;
-            
-              @Override
-              @Named("calculateStuff")
-              String calculateStuff(Inputs inputs){
-                if(calculateStuff != null){
-                  return calculateStuff;
-                }
-                calculateStuff = super.calculateStuff(inputs);
+          import org.mapstruct.Mapper;
+          import org.mapstruct.Named;
+          
+          @Mapper
+          public abstract class PseudoGeneratedCalculator extends Calculator {
+          
+            private String calculateStuff;
+          
+            @Override
+            @Named("calculateStuff")
+            String calculateStuff(Inputs inputs){
+              if(calculateStuff != null){
                 return calculateStuff;
               }
+              calculateStuff = super.calculateStuff(inputs);
+              return calculateStuff;
             }
+          }
           """);
     }
 
