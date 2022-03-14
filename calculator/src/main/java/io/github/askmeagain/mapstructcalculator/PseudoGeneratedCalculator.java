@@ -1,7 +1,8 @@
 package io.github.askmeagain.mapstructcalculator;
 
 import io.github.askmeagain.mapstructcalculator.calculator.Calculator;
-import lombok.Getter;
+import io.github.askmeagain.mapstructcalculator.entities.Inputs;
+import io.github.askmeagain.mapstructcalculator.entities.Outputs;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
@@ -22,12 +23,13 @@ public abstract class PseudoGeneratedCalculator implements Calculator {
     return map(this);
   }
 
+  @Override
   @Named("mapD")
-  public String lazyMapD(Calculator calculator) {
+  public String mapD(Calculator calculator) {
     if (lazyMapD != null) {
       return lazyMapD;
     }
-    lazyMapD = mapD(calculator);
+    lazyMapD = Calculator.super.mapD(calculator);
     return lazyMapD;
   }
 }

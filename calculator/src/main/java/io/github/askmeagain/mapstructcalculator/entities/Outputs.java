@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructcalculator;
+package io.github.askmeagain.mapstructcalculator.entities;
 
 import lombok.Builder;
 import lombok.Value;

@@ -1,7 +1,6 @@
 package io.github.askmeagain.mapstructcalculator.calculator;
 
-import io.github.askmeagain.mapstructcalculator.Inputs;
-import io.github.askmeagain.mapstructcalculator.Outputs;
+import io.github.askmeagain.mapstructcalculator.entities.Outputs;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 

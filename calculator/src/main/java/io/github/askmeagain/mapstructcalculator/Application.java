@@ -1,8 +1,8 @@
 package io.github.askmeagain.mapstructcalculator;
 
-import org.mapstruct.factory.Mappers;
+import io.github.askmeagain.mapstructcalculator.entities.Inputs;
 
-public class TestClass {
+public class Application {
 
   public static void main(String[] args) {
     var mapper = new PseudoGeneratedCalculatorImpl();
