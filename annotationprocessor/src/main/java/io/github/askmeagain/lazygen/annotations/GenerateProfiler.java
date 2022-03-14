@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructcalculator;
+package io.github.askmeagain.lazygen.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

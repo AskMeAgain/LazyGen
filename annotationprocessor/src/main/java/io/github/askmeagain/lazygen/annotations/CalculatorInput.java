@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructcalculator;
+package io.github.askmeagain.lazygen.annotations;
 
 public interface CalculatorInput<T> {
   default T getInputs() {

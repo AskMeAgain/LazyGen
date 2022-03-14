@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructcalculator.entities.output;
+package io.github.askmeagain.lazygen.entities.output;
 
 import lombok.Builder;
 import lombok.Value;
@@ -8,5 +8,6 @@ import lombok.Value;
 public class Outputs {
 
   Multiplications multiplications;
+  Summations summations;
 
 }
