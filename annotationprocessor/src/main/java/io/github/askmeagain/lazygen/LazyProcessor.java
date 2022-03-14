@@ -24,7 +24,7 @@ import java.util.Set;
 import static io.github.askmeagain.lazygen.other.LazyGenData.LAZY_GEN_ANNOTATION_PATH;
 import static io.github.askmeagain.lazygen.other.LazyGenData.MAPSTRUCT_GENERATOR_ANNOTATION_PATH;
 
-@SupportedAnnotationTypes({MAPSTRUCT_GENERATOR_ANNOTATION_PATH, LAZY_GEN_ANNOTATION_PATH})
+@SupportedAnnotationTypes({MAPSTRUCT_GENERATOR_ANNOTATION_PATH})
 @SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class LazyProcessor extends AbstractProcessor {
 
@@ -41,7 +41,7 @@ public class LazyProcessor extends AbstractProcessor {
     annotations.stream()
         .map(roundEnv::getElementsAnnotatedWith)
         .flatMap(Collection::stream)
-        .forEach(x -> generateLazyGenerator(roundEnv, elementUtils, x));
+        .forEach(generator -> generateLazyGenerator(roundEnv, elementUtils, generator));
 
     return true;
   }
@@ -57,7 +57,7 @@ public class LazyProcessor extends AbstractProcessor {
 
     var inputFullyQualifiedName = getInputFullyQualifiedName(generatorRoot);
     var packageName = getPackageName(elementUtils, oldFullyQualifiedName);
-    var lazyMethods = getLazyMethods(roundEnv, oldGeneratorName);
+    var lazyMethods = getLazyMethods(roundEnv, generatorRoot);
 
     LazyProcessorUtils.writeFile(
         processingEnv,
@@ -78,14 +78,16 @@ public class LazyProcessor extends AbstractProcessor {
     );
   }
 
-  private List<LazyMethodContainer> getLazyMethods(RoundEnvironment roundEnv, Name oldGeneratorName) {
-    return roundEnv.getElementsAnnotatedWith(LazyGen.class).stream()
-        .map(x -> LazyMethodContainer.builder()
-            .methodName(x.getSimpleName().toString())
-            .calculatorName(oldGeneratorName.toString())
-            .outputType(((ExecutableType) x.asType()).getReturnType().toString())
-            .build())
-        .toList();
+  private List<LazyMethodContainer> getLazyMethods(RoundEnvironment roundEnv, Element generator) {
+    var lazyMethods = roundEnv.getElementsAnnotatedWith(LazyGen.class);
+
+    for (Element method : lazyMethods) {
+      var parent = method.getEnclosingElement();
+    }
+
+    //TODO
+
+    return null;
   }
 
   private String getPackageName(Elements elementUtils, String oldFullyQualifiedName) {
