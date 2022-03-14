@@ -1,4 +1,4 @@
-package io.github.askmeagain.mapstructcalculator.entities;
+package io.github.askmeagain.mapstructcalculator.entities.input;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.Value;
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 public class Inputs {
 
-  String a;
-  String b;
+  Integer number1;
+  Integer number2;
 }
