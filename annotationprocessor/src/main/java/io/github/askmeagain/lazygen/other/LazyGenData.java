@@ -1,6 +1,10 @@
 package io.github.askmeagain.lazygen.other;
 
-public class CodeTemplates {
+public class LazyGenData {
+
+  public static final String LAZY_INPUT_INTERFACE_PATH = "io.github.askmeagain.lazygen.annotations.LazyGenInput";
+  public static final String MAPSTRUCT_GENERATOR_ANNOTATION_PATH = "io.github.askmeagain.lazygen.annotations.GenerateLazyMapStructMapper";
+  public static final String LAZY_GEN_ANNOTATION_PATH = "io.github.askmeagain.lazygen.annotations.LazyGen";
 
   public static final String MAPPER_TEMPLATE = """
       $PACKAGE

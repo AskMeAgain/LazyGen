@@ -1,6 +1,5 @@
 package io.github.askmeagain.lazygen.other;
 
-import io.github.askmeagain.lazygen.other.CodeTemplates;
 import lombok.Builder;
 import lombok.Value;
 
@@ -13,7 +12,7 @@ public class LazyMethodContainer {
   String outputType;
 
   public String computeTemplate() {
-    return CodeTemplates.LAZY_METHOD_TEMPLATE
+    return LazyGenData.LAZY_METHOD_TEMPLATE
         .replace("$LAZY_FIELD_NAME", "_" + methodName)
         .replace("$METHOD_NAME", methodName)
         .replace("$OUTPUT_TYPE", outputType)

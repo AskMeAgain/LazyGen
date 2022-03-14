@@ -1,6 +1,6 @@
 package io.github.askmeagain.lazygen.calculator;
 
-import io.github.askmeagain.lazygen.annotations.LazyAnnotation;
+import io.github.askmeagain.lazygen.annotations.LazyGen;
 import io.github.askmeagain.lazygen.TestCalculator;
 import io.github.askmeagain.lazygen.entities.output.Summations;
 import org.mapstruct.Mapping;
@@ -13,21 +13,21 @@ public interface SummationCalculator {
   @Mapping(target = "aaaa", source = "calculator", qualifiedByName = "aaaa")
   Summations mapSummations(TestCalculator calculator);
 
-  @LazyAnnotation
+  @LazyGen
   @Named("a")
   default String a(TestCalculator calculator) {
     System.out.println("a");
     return "a";
   }
 
-  @LazyAnnotation
+  @LazyGen
   @Named("aa")
   default String aa(TestCalculator calculator) {
     System.out.println("aa");
     return calculator.a(calculator) + calculator.a(calculator);
   }
 
-  @LazyAnnotation
+  @LazyGen
   @Named("aaaa")
   default String aaaa(TestCalculator calculator) {
     System.out.println("aaaa");

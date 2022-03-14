@@ -23,7 +23,7 @@ public class LazyProcessorUtils {
         .createSourceFile(fullyQualifiedName);
 
     try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
-      out.println(CodeTemplates.MAPPER_TEMPLATE
+      out.println(LazyGenData.MAPPER_TEMPLATE
           .replace("$MAPPER_NAME", mapperName)
           .replace("$PACKAGE", packageName)
           .replace("$MAPPER_INTERFACE", mapperInterface)

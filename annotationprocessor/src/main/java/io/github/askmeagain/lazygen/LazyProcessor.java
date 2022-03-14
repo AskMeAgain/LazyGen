@@ -1,6 +1,7 @@
 package io.github.askmeagain.lazygen;
 
-import io.github.askmeagain.lazygen.annotations.LazyAnnotation;
+import io.github.askmeagain.lazygen.annotations.LazyGen;
+import io.github.askmeagain.lazygen.other.LazyGenData;
 import io.github.askmeagain.lazygen.other.LazyProcessorUtils;
 import io.github.askmeagain.lazygen.other.LazyMethodContainer;
 import lombok.SneakyThrows;
@@ -20,12 +21,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-@SupportedAnnotationTypes("io.github.askmeagain.lazygen.annotations.GenerateProfiler")
+import static io.github.askmeagain.lazygen.other.LazyGenData.LAZY_GEN_ANNOTATION_PATH;
+import static io.github.askmeagain.lazygen.other.LazyGenData.MAPSTRUCT_GENERATOR_ANNOTATION_PATH;
+
+@SupportedAnnotationTypes({MAPSTRUCT_GENERATOR_ANNOTATION_PATH, LAZY_GEN_ANNOTATION_PATH})
 @SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class LazyProcessor extends AbstractProcessor {
 
-  @SneakyThrows
   @Override
+  @SneakyThrows
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
     if (roundEnv.processingOver() || annotations.size() == 0) {
@@ -75,7 +79,7 @@ public class LazyProcessor extends AbstractProcessor {
   }
 
   private List<LazyMethodContainer> getLazyMethods(RoundEnvironment roundEnv, Name oldGeneratorName) {
-    return roundEnv.getElementsAnnotatedWith(LazyAnnotation.class).stream()
+    return roundEnv.getElementsAnnotatedWith(LazyGen.class).stream()
         .map(x -> LazyMethodContainer.builder()
             .methodName(x.getSimpleName().toString())
             .calculatorName(oldGeneratorName.toString())
@@ -95,7 +99,7 @@ public class LazyProcessor extends AbstractProcessor {
 
     return generatorRootTypeElement.getInterfaces().stream()
         .map(TypeMirror::toString)
-        .filter(x -> x.startsWith("io.github.askmeagain.lazygen.annotations.CalculatorInput"))
+        .filter(x -> x.startsWith(LazyGenData.LAZY_INPUT_INTERFACE_PATH))
         .map(x -> x.substring(x.indexOf('<') + 1, x.length() - 1))
         .findFirst()
         .orElseThrow(() -> new RuntimeException("CalculatorInput interface missing on " + generatorRoot));
