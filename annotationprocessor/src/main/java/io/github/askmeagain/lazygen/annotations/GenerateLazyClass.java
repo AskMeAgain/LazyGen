@@ -7,5 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface GenerateLazyMapStructMapper {
+public @interface GenerateLazyClass {
+  boolean mapstruct() default false;
 }

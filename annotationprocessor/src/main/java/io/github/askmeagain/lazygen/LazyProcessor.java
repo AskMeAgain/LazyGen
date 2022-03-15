@@ -1,9 +1,10 @@
 package io.github.askmeagain.lazygen;
 
 import io.github.askmeagain.lazygen.annotations.LazyGen;
+import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.other.LazyGenData;
-import io.github.askmeagain.lazygen.other.LazyProcessorUtils;
 import io.github.askmeagain.lazygen.other.LazyMethodContainer;
+import io.github.askmeagain.lazygen.other.LazyProcessorUtils;
 import lombok.SneakyThrows;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -12,16 +13,12 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static io.github.askmeagain.lazygen.other.LazyGenData.LAZY_GEN_ANNOTATION_PATH;
 import static io.github.askmeagain.lazygen.other.LazyGenData.MAPSTRUCT_GENERATOR_ANNOTATION_PATH;
 
 @SupportedAnnotationTypes({MAPSTRUCT_GENERATOR_ANNOTATION_PATH})
@@ -50,6 +47,8 @@ public class LazyProcessor extends AbstractProcessor {
   private void generateLazyGenerator(RoundEnvironment roundEnv, Elements elementUtils, Element generatorRoot) {
     var outputFullyQualifiedName = getOutputFullyQualifiedName(generatorRoot);
 
+    var realAnnotation = generatorRoot.getAnnotation(GenerateLazyClass.class);
+    var isMapStruct = realAnnotation.mapstruct();
     var oldFullyQualifiedName = generatorRoot.toString();
     var oldGeneratorName = generatorRoot.getSimpleName();
     var newGeneratorName = "Lazy" + oldGeneratorName;
@@ -57,37 +56,80 @@ public class LazyProcessor extends AbstractProcessor {
 
     var inputFullyQualifiedName = getInputFullyQualifiedName(generatorRoot);
     var packageName = getPackageName(elementUtils, oldFullyQualifiedName);
-    var lazyMethods = getLazyMethods(roundEnv, generatorRoot);
+    var lazyMethods = getLazyMethods(roundEnv, elementUtils, generatorRoot, isMapStruct);
+
+    var importList = new ArrayList<String>();
+
+    importList.add(oldFullyQualifiedName);
+    importList.add("org.mapstruct.Mapper");
+    importList.add("org.mapstruct.Named");
+
+    outputFullyQualifiedName.ifPresent(importList::add);
+    inputFullyQualifiedName.ifPresent(importList::add);
 
     LazyProcessorUtils.writeFile(
+        isMapStruct,
         processingEnv,
         newFullyQualifiedName,
         "package " + packageName + ";",
         newGeneratorName,
         oldGeneratorName.toString(),
-        elementUtils.getTypeElement(inputFullyQualifiedName).getSimpleName().toString(),
-        elementUtils.getTypeElement(outputFullyQualifiedName).getSimpleName().toString(),
+        inputFullyQualifiedName.map(x -> elementUtils.getTypeElement(x).getSimpleName().toString()),
+        outputFullyQualifiedName.map(x -> elementUtils.getTypeElement(x).getSimpleName().toString()),
         lazyMethods,
-        List.of(
-            outputFullyQualifiedName,
-            inputFullyQualifiedName,
-            oldFullyQualifiedName,
-            "org.mapstruct.Mapper",
-            "org.mapstruct.Named"
-        )
+        importList
     );
   }
 
-  private List<LazyMethodContainer> getLazyMethods(RoundEnvironment roundEnv, Element generator) {
+  private List<LazyMethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator, boolean isMapStruct) {
     var lazyMethods = roundEnv.getElementsAnnotatedWith(LazyGen.class);
+
+    var interfaces = recursivelyGetInterfaces(elementUtils, generator);
+
+    var resultList = new ArrayList<Element>();
 
     for (Element method : lazyMethods) {
       var parent = method.getEnclosingElement();
+      if (interfaces.contains(parent.toString())) {
+        resultList.add(method);
+      }
     }
 
-    //TODO
+    return resultList.stream()
+        .map(lazyMethod -> {
+          var method = ((ExecutableType) lazyMethod.asType());
+          var methodOriginClass = "";
+          if (isMapStruct) {
+            methodOriginClass = generator.getSimpleName().toString() + ".";
+          }
+          return LazyMethodContainer.builder()
+              .methodName(lazyMethod.getSimpleName().toString())
+              .methodOriginClass(methodOriginClass)
+              .parameters(method.getParameterTypes().stream()
+                  .map(y -> elementUtils.getTypeElement(y.toString()))
+                  .map(y -> y.getSimpleName().toString())
+                  .toList())
+              .outputType(method.getReturnType().toString())
+              .build();
+        })
+        .toList();
+  }
 
-    return null;
+  private Set<String> recursivelyGetInterfaces(Elements elementUtils, Element generator) {
+    if (generator == null) {
+      return Collections.emptySet();
+    }
+
+    List<? extends TypeMirror> interfaces = elementUtils.getTypeElement(generator.toString()).getInterfaces();
+
+    var result = new HashSet<String>();
+    result.add(generator.toString());
+
+    for (var inter : interfaces) {
+      result.addAll(recursivelyGetInterfaces(elementUtils, elementUtils.getTypeElement(inter.toString())));
+    }
+
+    return result;
   }
 
   private String getPackageName(Elements elementUtils, String oldFullyQualifiedName) {
@@ -96,23 +138,21 @@ public class LazyProcessor extends AbstractProcessor {
         .toString();
   }
 
-  private String getInputFullyQualifiedName(Element generatorRoot) {
+  private Optional<String> getInputFullyQualifiedName(Element generatorRoot) {
     var generatorRootTypeElement = (TypeElement) generatorRoot;
 
     return generatorRootTypeElement.getInterfaces().stream()
         .map(TypeMirror::toString)
         .filter(x -> x.startsWith(LazyGenData.LAZY_INPUT_INTERFACE_PATH))
         .map(x -> x.substring(x.indexOf('<') + 1, x.length() - 1))
-        .findFirst()
-        .orElseThrow(() -> new RuntimeException("CalculatorInput interface missing on " + generatorRoot));
+        .findFirst();
   }
 
-  private String getOutputFullyQualifiedName(Element generatorRoot) {
+  private Optional<String> getOutputFullyQualifiedName(Element generatorRoot) {
     return generatorRoot.getEnclosedElements().stream()
         .filter(x -> x.getSimpleName().toString().equals("map"))
         .map(x -> (ExecutableType) x.asType())
         .map(x -> x.getReturnType().toString())
-        .findFirst()
-        .orElseThrow(() -> new RuntimeException("Could not find method with name 'map' on the root interface " + generatorRoot));
+        .findFirst();
   }
 }

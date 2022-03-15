@@ -1,17 +1,15 @@
 package io.github.askmeagain.lazygen;
 
 import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
-import io.github.askmeagain.lazygen.annotations.LazyGenInput;
-import io.github.askmeagain.lazygen.calculator.MultiplicatorCalculator;
-import io.github.askmeagain.lazygen.calculator.SummationCalculator;
-import io.github.askmeagain.lazygen.entities.input.Inputs;
+import io.github.askmeagain.lazygen.calculator.MultiplicatorCalculator3;
+import io.github.askmeagain.lazygen.calculator.SummationCalculator3;
 import io.github.askmeagain.lazygen.entities.output.Outputs;
 import org.mapstruct.Mapping;
 
 @GenerateLazyClass(mapstruct = true)
-public interface TestCalculator extends MultiplicatorCalculator, SummationCalculator, LazyGenInput<Inputs> {
+public interface TestCalculatorWithoutInput extends MultiplicatorCalculator3, SummationCalculator3 {
 
   @Mapping(target = "multiplications", expression = "java(mapMultiplications(calculator))")
   @Mapping(target = "summations", expression = "java(mapSummations(calculator))")
-  Outputs map(TestCalculator calculator);
+  Outputs map(TestCalculatorWithoutInput calculator);
 }
