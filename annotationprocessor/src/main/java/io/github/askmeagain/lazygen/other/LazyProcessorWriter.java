@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class LazyProcessorUtils {
+public class LazyProcessorWriter {
   public static void writeFile(
       boolean isMapStructMapper,
       ProcessingEnvironment processingEnv,

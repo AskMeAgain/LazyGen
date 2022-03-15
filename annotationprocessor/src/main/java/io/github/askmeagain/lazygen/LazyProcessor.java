@@ -4,7 +4,7 @@ import io.github.askmeagain.lazygen.annotations.LazyGen;
 import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.other.LazyGenData;
 import io.github.askmeagain.lazygen.other.LazyMethodContainer;
-import io.github.askmeagain.lazygen.other.LazyProcessorUtils;
+import io.github.askmeagain.lazygen.other.LazyProcessorWriter;
 import lombok.SneakyThrows;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -67,7 +67,7 @@ public class LazyProcessor extends AbstractProcessor {
     outputFullyQualifiedName.ifPresent(importList::add);
     inputFullyQualifiedName.ifPresent(importList::add);
 
-    LazyProcessorUtils.writeFile(
+    LazyProcessorWriter.writeFile(
         isMapStruct,
         processingEnv,
         newFullyQualifiedName,

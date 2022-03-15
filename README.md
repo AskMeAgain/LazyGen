@@ -18,7 +18,7 @@ Note: The code gen relies on the @Named annotation. You can only make @Named met
 2. Add @LazyGen to any @Named method
 3. Get your mapStruct mapper via Mappers.getMapper(LazyXXXXXX.class);
 
-## LazyGenInput\<T> 
+### LazyGenInput\<T> 
 
 LazyGen will search for a method called "map" and an interface LazyGenInput 
 and will add a calculation method, which maps from the LazyGenInput generic type
