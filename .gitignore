@@ -5,3 +5,4 @@
 /calculator/build/
 /calculator/build/classes/java/main/
 **/build/
+/.idea/
