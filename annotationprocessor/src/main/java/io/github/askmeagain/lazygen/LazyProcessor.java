@@ -51,7 +51,7 @@ public class LazyProcessor extends AbstractProcessor {
 
     var realAnnotation = generatorRoot.getAnnotation(GenerateLazyClass.class);
     var isInterface = ElementKind.INTERFACE == generatorRoot.getKind();
-    var isMapStruct = realAnnotation.value() == ResultType.MAPSTRUCT_INTERFACE || realAnnotation.value() == ResultType.MAPSTRUCT_ABSTRACT_CLASS;
+    var isMapStruct = realAnnotation.value() == ResultType.MAPSTRUCT_COMPATIBLE;
     var oldFullyQualifiedName = generatorRoot.toString();
     var oldGeneratorName = generatorRoot.getSimpleName();
     var newGeneratorName = "Lazy" + oldGeneratorName;

@@ -1,7 +1,6 @@
 package io.github.askmeagain.lazygen.other;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -59,19 +58,10 @@ public class LazyProcessorWriter {
           .isAbstractMap("")
           .extendsImplements(isInterface ? "implements " : "extends ")
           .mapStructMapperTemplate("");
-      case INTERFACE -> TemplateData.builder()
-          .classInterface("interface ")
-          .extendsImplements("extends ")
-          .mapStructMapperTemplate("");
-      case MAPSTRUCT_ABSTRACT_CLASS -> TemplateData.builder()
+      case MAPSTRUCT_COMPATIBLE -> TemplateData.builder()
           .classInterface("class ")
           .isAbstractMap("abstract ")
           .extendsImplements(isInterface ? "implements " : "extends ")
-          .mapStructMapperTemplate("@Mapper ");
-      case MAPSTRUCT_INTERFACE -> TemplateData.builder()
-          .classInterface("interface ")
-          .isAbstractMap("")
-          .extendsImplements("extends ")
           .mapStructMapperTemplate("@Mapper ");
     };
 

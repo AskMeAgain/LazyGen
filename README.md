@@ -95,7 +95,7 @@ to reference your own methods in a lazy way
     
         @Named("a")
         @Override
-        public java.lang.String a(io.github.askmeagain.lazygen.calculator.TestMapper _TestMapper0) {
+        public java.lang.String a(io.github.askmeagain.lazygen.MapstructAbstractClass _TestMapper0) {
             if (_a != null) {
                 return _a;
             }
