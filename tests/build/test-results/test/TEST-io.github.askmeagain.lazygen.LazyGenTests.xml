@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.askmeagain.lazygen.LazyGenTests" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-03-18T22:04:23" hostname="devbox" time="0.025">
+<testsuite name="io.github.askmeagain.lazygen.LazyGenTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-03-18T22:14:15" hostname="devbox" time="0.012">
   <properties/>
-  <testcase name="mapStructInput()" classname="io.github.askmeagain.lazygen.LazyGenTests" time="0.019"/>
-  <testcase name="classResult()" classname="io.github.askmeagain.lazygen.LazyGenTests" time="0.001"/>
-  <testcase name="mapStructAbstractClass()" classname="io.github.askmeagain.lazygen.LazyGenTests" time="0.002"/>
-  <testcase name="mapStructInterface()" classname="io.github.askmeagain.lazygen.LazyGenTests" time="0.002"/>
-  <testcase name="abstractClassResult()" classname="io.github.askmeagain.lazygen.LazyGenTests" time="0.001"/>
+  <testcase name="classResultWithInput()" classname="io.github.askmeagain.lazygen.LazyGenTests" time="0.012"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

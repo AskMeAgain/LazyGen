@@ -25,11 +25,12 @@ class LazyGenTests {
 
     //Assert ---------------------------------------------------------------------------------
     var multiplications = result.getMultiplications();
+    var summations = result.getSummations();
+
     Assertions.assertEquals(2, multiplications.getNumber1mul2());
     Assertions.assertEquals(4, multiplications.getNumber1mul4());
     Assertions.assertEquals(8, multiplications.getNumber1mul8());
 
-    var summations = result.getSummations();
     Assertions.assertEquals("a", summations.getA());
     Assertions.assertEquals("aa", summations.getAa());
     Assertions.assertEquals("aaaa", summations.getAaaa());
@@ -74,6 +75,22 @@ class LazyGenTests {
     lazyNormalClass.abc();
     lazyNormalClass.abc();
     lazyNormalClass.abc();
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
+  }
+
+  @Test
+  void classResultWithInput() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new LazyNormalClassWithInput();
+    var input = new Input(1);
+
+    //Act ------------------------------------------------------------------------------------
+    lazyNormalClass.calculate(input);
+    lazyNormalClass.calculate(input);
+    lazyNormalClass.calculate(input);
+    lazyNormalClass.calculate(input);
 
     //Assert ---------------------------------------------------------------------------------
     Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());

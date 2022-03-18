@@ -28,8 +28,8 @@ public class LazyProcessorWriter {
       var inputMethod = "";
       if (inputType.isPresent() && outputType.isPresent()) {
         inputMethod = LazyGenData.INPUT_TEMPLATE
-            .replace("$INPUT_TYPE", inputType.orElse("NOT FOUND"))
-            .replace("$OUTPUT_TYPE", outputType.orElse("NOT FOUND"));
+            .replace("$INPUT_TYPE", inputType.get())
+            .replace("$OUTPUT_TYPE", outputType.get());
       }
 
       var template = generateTemplateData(resultType)

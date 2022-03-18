@@ -6,7 +6,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-03-18T23:04:08+0100",
+    date = "2022-03-18T23:13:54+0100",
     comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 17.0.1 (SAP SE)"
 )
 public class LazyMapStructInterfaceImpl extends LazyMapStructInterface {
