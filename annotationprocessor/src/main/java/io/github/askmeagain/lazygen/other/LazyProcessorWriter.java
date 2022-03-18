@@ -32,8 +32,9 @@ public class LazyProcessorWriter {
             .replace("$OUTPUT_TYPE", outputType.orElse("NOT FOUND"));
       }
 
-      var template = generateTemplateData(resultType, isInterface)
+      var template = generateTemplateData(resultType)
           .imports(imports)
+          .extendsImplements(isInterface)
           .lazyMethodContainers(lazyMethodContainers)
           .packageName(packageName)
           .inputMethod(inputMethod)
@@ -45,26 +46,18 @@ public class LazyProcessorWriter {
     }
   }
 
-  private static TemplateData.TemplateDataBuilder generateTemplateData(ResultType resultType, boolean isInterface) {
-
+  private static TemplateData.TemplateDataBuilder generateTemplateData(ResultType resultType) {
     return switch (resultType) {
       case ABSTRACT_CLASS -> TemplateData.builder()
-          .classInterface("class ")
-          .isAbstractMap("abstract ")
-          .extendsImplements(isInterface ? "implements " : "extends ")
-          .mapStructMapperTemplate("");
+          .classInterface("abstract class ")
+          .mapStructMapperTemplate(false);
       case CLASS -> TemplateData.builder()
           .classInterface("class ")
-          .isAbstractMap("")
-          .extendsImplements(isInterface ? "implements " : "extends ")
-          .mapStructMapperTemplate("");
+          .mapStructMapperTemplate(false);
       case MAPSTRUCT_COMPATIBLE -> TemplateData.builder()
-          .classInterface("class ")
-          .isAbstractMap("abstract ")
-          .extendsImplements(isInterface ? "implements " : "extends ")
-          .mapStructMapperTemplate("@Mapper ");
+          .classInterface("abstract class ")
+          .mapStructMapperTemplate(true);
     };
-
   }
 
   private static String generateTemplate(TemplateData templateData) {
@@ -73,9 +66,8 @@ public class LazyProcessorWriter {
 
     for (int i = 0; i < 2; i++) {
       result = result.replace("$CLASS_INTERFACE", templateData.getClassInterface())
-          .replace("$EXTENDS_IMPLEMENTS", templateData.getExtendsImplements())
-          .replace("$ABSTRACT", templateData.getIsAbstractMap())
-          .replace("$MAPSTRUCT", templateData.getMapStructMapperTemplate())
+          .replace("$EXTENDS_IMPLEMENTS", templateData.getExtendsImplements() ? "implements" : "extends")
+          .replace("$MAPSTRUCT", templateData.getMapStructMapperTemplate() ? "@Mapper" : "")
           .replace("$INPUT_METHOD", templateData.getInputMethod())
           .replace("$MAPPER_NAME", templateData.getMapperName())
           .replace("$PACKAGE", templateData.getPackageName())

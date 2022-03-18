@@ -5,7 +5,6 @@ import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.other.LazyGenData;
 import io.github.askmeagain.lazygen.other.LazyMethodContainer;
 import io.github.askmeagain.lazygen.other.LazyProcessorWriter;
-import io.github.askmeagain.lazygen.other.ResultType;
 import lombok.SneakyThrows;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -25,7 +24,7 @@ import static io.github.askmeagain.lazygen.other.LazyGenData.MAPSTRUCT_GENERATOR
 
 @SupportedAnnotationTypes({MAPSTRUCT_GENERATOR_ANNOTATION_PATH})
 @SupportedSourceVersion(SourceVersion.RELEASE_17)
-public class LazyProcessor extends AbstractProcessor {
+public class LazyGenProcessor extends AbstractProcessor {
 
   @Override
   @SneakyThrows
@@ -51,7 +50,6 @@ public class LazyProcessor extends AbstractProcessor {
 
     var realAnnotation = generatorRoot.getAnnotation(GenerateLazyClass.class);
     var isInterface = ElementKind.INTERFACE == generatorRoot.getKind();
-    var isMapStruct = realAnnotation.value() == ResultType.MAPSTRUCT_COMPATIBLE;
     var oldFullyQualifiedName = generatorRoot.toString();
     var oldGeneratorName = generatorRoot.getSimpleName();
     var newGeneratorName = "Lazy" + oldGeneratorName;
@@ -75,7 +73,7 @@ public class LazyProcessor extends AbstractProcessor {
         isInterface,
         processingEnv,
         newFullyQualifiedName,
-        "package " + packageName + ";",
+        packageName,
         newGeneratorName,
         oldGeneratorName.toString(),
         inputFullyQualifiedName.map(x -> elementUtils.getTypeElement(x).getSimpleName().toString()),

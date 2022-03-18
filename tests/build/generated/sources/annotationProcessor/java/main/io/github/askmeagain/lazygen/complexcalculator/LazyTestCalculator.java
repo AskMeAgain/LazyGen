@@ -6,8 +6,8 @@ import org.mapstruct.Named;
 import io.github.askmeagain.lazygen.output.ComplexOutputs;
 import io.github.askmeagain.lazygen.input.Input;
 
-@Mapper 
-public abstract class  LazyTestCalculator implements  TestCalculator {
+@Mapper
+public abstract class  LazyTestCalculator implements TestCalculator {
   private Input inputs;
 
   @Override

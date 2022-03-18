@@ -11,9 +11,8 @@ import java.util.List;
 public class TemplateData {
 
   @NonNull String classInterface;
-  @NonNull String extendsImplements;
-  @NonNull String isAbstractMap;
-  @NonNull String mapStructMapperTemplate;
+  @NonNull Boolean extendsImplements;
+  @NonNull Boolean mapStructMapperTemplate;
   @NonNull String inputMethod;
   @NonNull String mapperName;
   @NonNull String packageName;

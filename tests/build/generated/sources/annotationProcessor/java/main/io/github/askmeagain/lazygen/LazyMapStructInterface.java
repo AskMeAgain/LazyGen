@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import io.github.askmeagain.lazygen.output.Outputs;
 
-@Mapper 
-public abstract class  LazyMapStructInterface implements  MapStructInterface {
+@Mapper
+public abstract class  LazyMapStructInterface implements MapStructInterface {
 
   @Named("a")
   @Override

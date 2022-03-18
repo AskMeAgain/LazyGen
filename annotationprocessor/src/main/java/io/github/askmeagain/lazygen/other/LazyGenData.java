@@ -6,12 +6,12 @@ public class LazyGenData {
   public static final String MAPSTRUCT_GENERATOR_ANNOTATION_PATH = "io.github.askmeagain.lazygen.annotations.GenerateLazyClass";
 
   public static final String MAPPER_TEMPLATE = """
-      $PACKAGE
+      package $PACKAGE;
 
       $IMPORT
 
       $MAPSTRUCT
-      public $ABSTRACT$CLASS_INTERFACE $MAPPER_NAME $EXTENDS_IMPLEMENTS $MAPPER_INTERFACE {
+      public $CLASS_INTERFACE $MAPPER_NAME $EXTENDS_IMPLEMENTS $MAPPER_INTERFACE {
       $INPUT_METHOD
       $LAZY_METHODS
       }

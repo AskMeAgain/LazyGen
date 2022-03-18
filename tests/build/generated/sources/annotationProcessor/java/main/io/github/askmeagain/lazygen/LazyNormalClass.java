@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
 
-public class  LazyNormalClass extends  NormalClass {
+public class  LazyNormalClass extends NormalClass {
 
   
   @Override

@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import java.lang.String;
 
-@Mapper 
-public abstract class  LazyMapstructAbstractClass extends  MapstructAbstractClass {
+@Mapper
+public abstract class  LazyMapstructAbstractClass extends MapstructAbstractClass {
 
   
   @Override
