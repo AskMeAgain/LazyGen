@@ -11,7 +11,7 @@ public class LazyGenData {
       $IMPORT
 
       $MAPSTRUCT
-      public $ABSTRACTclass $MAPPER_NAME $EXTENDS_IMPLEMENTS $MAPPER_INTERFACE {
+      public $ABSTRACT$CLASS_INTERFACE $MAPPER_NAME $EXTENDS_IMPLEMENTS $MAPPER_INTERFACE {
       $INPUT_METHOD
       $LAZY_METHODS
       }
@@ -32,10 +32,8 @@ public class LazyGenData {
       """;
 
   public static String LAZY_METHOD_TEMPLATE = """
-        private $OUTPUT_TYPE $LAZY_FIELD_NAME;
-
+        $NAMED
         @Override
-        @Named("$METHOD_NAME")
         public $OUTPUT_TYPE $METHOD_NAME($PARAMETERS) {
           if ($LAZY_FIELD_NAME != null) {
             return $LAZY_FIELD_NAME;
@@ -43,6 +41,8 @@ public class LazyGenData {
           $LAZY_FIELD_NAME = $METHOD_ORIGIN_CLASSsuper.$METHOD_NAME($PARAMETERS_WITHOUT_TYPE);
           return $LAZY_FIELD_NAME;
         }
+        private $OUTPUT_TYPE $LAZY_FIELD_NAME;
+        
       """;
 
 }

@@ -2,11 +2,14 @@ package io.github.askmeagain.lazygen.calculator;
 
 import io.github.askmeagain.lazygen.TestCalculator;
 import io.github.askmeagain.lazygen.TestCalculator2;
+import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.annotations.LazyGen;
 import io.github.askmeagain.lazygen.entities.output.Summations;
+import io.github.askmeagain.lazygen.other.ResultType;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+@GenerateLazyClass(ResultType.ABSTRACT_CLASS)
 public interface SummationCalculator2 {
 
   @Mapping(target = "a", source = "calculator", qualifiedByName = "a")

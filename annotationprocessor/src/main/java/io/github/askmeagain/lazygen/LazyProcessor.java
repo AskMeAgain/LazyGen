@@ -5,6 +5,7 @@ import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.other.LazyGenData;
 import io.github.askmeagain.lazygen.other.LazyMethodContainer;
 import io.github.askmeagain.lazygen.other.LazyProcessorWriter;
+import io.github.askmeagain.lazygen.other.ResultType;
 import lombok.SneakyThrows;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -13,6 +14,7 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeMirror;
@@ -48,7 +50,8 @@ public class LazyProcessor extends AbstractProcessor {
     var outputFullyQualifiedName = getOutputFullyQualifiedName(generatorRoot);
 
     var realAnnotation = generatorRoot.getAnnotation(GenerateLazyClass.class);
-    var isMapStruct = realAnnotation.mapstruct();
+    var isInterface = ElementKind.INTERFACE == generatorRoot.getKind();
+    var isMapStruct = realAnnotation.value() == ResultType.MAPSTRUCT_INTERFACE || realAnnotation.value() == ResultType.MAPSTRUCT_ABSTRACT_CLASS;
     var oldFullyQualifiedName = generatorRoot.toString();
     var oldGeneratorName = generatorRoot.getSimpleName();
     var newGeneratorName = "Lazy" + oldGeneratorName;
@@ -56,7 +59,7 @@ public class LazyProcessor extends AbstractProcessor {
 
     var inputFullyQualifiedName = getInputFullyQualifiedName(generatorRoot);
     var packageName = getPackageName(elementUtils, oldFullyQualifiedName);
-    var lazyMethods = getLazyMethods(roundEnv, elementUtils, generatorRoot, isMapStruct);
+    var lazyMethods = getLazyMethods(roundEnv, elementUtils, generatorRoot, isInterface);
 
     var importList = new ArrayList<String>();
 
@@ -68,7 +71,8 @@ public class LazyProcessor extends AbstractProcessor {
     inputFullyQualifiedName.ifPresent(importList::add);
 
     LazyProcessorWriter.writeFile(
-        isMapStruct,
+        realAnnotation.value(),
+        isInterface,
         processingEnv,
         newFullyQualifiedName,
         "package " + packageName + ";",
@@ -105,9 +109,9 @@ public class LazyProcessor extends AbstractProcessor {
           return LazyMethodContainer.builder()
               .methodName(lazyMethod.getSimpleName().toString())
               .methodOriginClass(methodOriginClass)
+              .isMapstruct(isMapStruct)
               .parameters(method.getParameterTypes().stream()
                   .map(y -> elementUtils.getTypeElement(y.toString()))
-                  .map(y -> y.getSimpleName().toString())
                   .toList())
               .outputType(method.getReturnType().toString())
               .build();

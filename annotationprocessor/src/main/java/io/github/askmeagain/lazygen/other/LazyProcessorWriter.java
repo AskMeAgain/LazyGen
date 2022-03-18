@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 
 public class LazyProcessorWriter {
   public static void writeFile(
-      boolean isMapStructMapper,
+      ResultType resultType,
+      boolean isInterface,
       ProcessingEnvironment processingEnv,
       String fullyQualifiedName,
       String packageName,
@@ -21,8 +22,7 @@ public class LazyProcessorWriter {
       List<LazyMethodContainer> lazyMethodContainers,
       List<String> imports
   ) throws IOException {
-    JavaFileObject builderFile = processingEnv.getFiler()
-        .createSourceFile(fullyQualifiedName);
+    var builderFile = processingEnv.getFiler().createSourceFile(fullyQualifiedName);
 
     try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
 
@@ -33,28 +33,71 @@ public class LazyProcessorWriter {
             .replace("$OUTPUT_TYPE", outputType.orElse("NOT FOUND"));
       }
 
-      var mapStructMapperTemplate = "";
-      var isAbstractMap = "";
-      var extendsImplements = "extends";
-      if (isMapStructMapper) {
-        extendsImplements = "implements";
-        isAbstractMap = "abstract ";
-        mapStructMapperTemplate = "@Mapper";
-      }
+      var template = generateTemplateData(resultType, isInterface)
+          .imports(imports)
+          .lazyMethodContainers(lazyMethodContainers)
+          .packageName(packageName)
+          .inputMethod(inputMethod)
+          .mapperName(mapperName)
+          .mapperInterface(mapperInterface)
+          .build();
 
-      out.println(LazyGenData.MAPPER_TEMPLATE
-          .replace("$EXTENDS_IMPLEMENTS", extendsImplements)
-          .replace("$ABSTRACT", isAbstractMap)
-          .replace("$MAPSTRUCT", mapStructMapperTemplate)
-          .replace("$INPUT_METHOD", inputMethod)
-          .replace("$MAPPER_NAME", mapperName)
-          .replace("$PACKAGE", packageName)
-          .replace("$MAPPER_INTERFACE", mapperInterface)
-          .replace("$LAZY_METHODS", lazyMethodContainers.stream()
+      out.println(generateTemplate(template));
+    }
+  }
+
+  private static TemplateData.TemplateDataBuilder generateTemplateData(ResultType resultType, boolean isInterface) {
+
+    return switch (resultType) {
+      case ABSTRACT_CLASS -> TemplateData.builder()
+          .classInterface("class ")
+          .isAbstractMap("abstract ")
+          .extendsImplements(isInterface ? "implements " : "extends ")
+          .mapStructMapperTemplate("");
+      case CLASS -> TemplateData.builder()
+          .classInterface("class ")
+          .isAbstractMap("")
+          .extendsImplements(isInterface ? "implements " : "extends ")
+          .mapStructMapperTemplate("");
+      case INTERFACE -> TemplateData.builder()
+          .classInterface("interface ")
+          .extendsImplements("extends ")
+          .mapStructMapperTemplate("");
+      case MAPSTRUCT_ABSTRACT_CLASS -> TemplateData.builder()
+          .classInterface("class ")
+          .isAbstractMap("abstract ")
+          .extendsImplements(isInterface ? "implements " : "extends ")
+          .mapStructMapperTemplate("@Mapper ");
+      case MAPSTRUCT_INTERFACE -> TemplateData.builder()
+          .classInterface("interface ")
+          .isAbstractMap("")
+          .extendsImplements("extends ")
+          .mapStructMapperTemplate("@Mapper ");
+    };
+
+  }
+
+  private static String generateTemplate(TemplateData templateData) {
+
+    var result = LazyGenData.MAPPER_TEMPLATE;
+
+    for (int i = 0; i < 2; i++) {
+      result = result.replace("$CLASS_INTERFACE", templateData.getClassInterface())
+          .replace("$EXTENDS_IMPLEMENTS", templateData.getExtendsImplements())
+          .replace("$ABSTRACT", templateData.getIsAbstractMap())
+          .replace("$MAPSTRUCT", templateData.getMapStructMapperTemplate())
+          .replace("$INPUT_METHOD", templateData.getInputMethod())
+          .replace("$MAPPER_NAME", templateData.getMapperName())
+          .replace("$PACKAGE", templateData.getPackageName())
+          .replace("$MAPPER_INTERFACE", templateData.getMapperInterface())
+          .replace("$LAZY_METHODS", templateData.getLazyMethodContainers().stream()
               .map(LazyMethodContainer::computeTemplate)
               .collect(Collectors.joining("\n")))
-          .replace("$IMPORT", imports.stream().map(x -> "import " + x + ";").collect(Collectors.joining("\n")))
-      );
+          .replace("$IMPORT", templateData.getImports().stream()
+              .map(x -> "import " + x + ";")
+              .collect(Collectors.joining("\n")));
     }
+
+    return result;
   }
 }
