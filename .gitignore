@@ -4,3 +4,4 @@
 /annotationprocessor/build/classes/java/main/
 /calculator/build/
 /calculator/build/classes/java/main/
+**/build/
