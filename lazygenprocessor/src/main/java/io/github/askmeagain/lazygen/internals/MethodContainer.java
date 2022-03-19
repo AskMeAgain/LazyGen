@@ -12,7 +12,7 @@ import java.util.Optional;
 @Builder
 class MethodContainer {
 
-  @NonNull Optional<String> foundNamed;
+  @NonNull Optional<String> namedAnnotation;
   @NonNull String methodOriginClass;
   @NonNull String methodName;
   @NonNull String outputType;

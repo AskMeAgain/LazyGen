@@ -41,11 +41,12 @@ class LazyProcessorWriter {
     var atomicInt = new AtomicInteger();
 
     return LazyGenTemplates.LAZY_METHOD_TEMPLATE
-        .replace("$NAMED", methodContainer.getFoundNamed().isPresent() ? "@Named($NAMED_FOUND)" : "")
         .replace("$LAZY_FIELD_NAME", getLazyFieldName(methodContainer))
-        .replace("$NAMED_FOUND", methodContainer.getFoundNamed().orElse(""))
         .replace("$METHOD_NAME", methodContainer.getMethodName())
         .replace("$METHOD_ORIGIN_CLASS", lazyTemplateData.getIsInterface() ? methodContainer.getMethodOriginClass() : "")
+        .replace("$NAMED", methodContainer.getNamedAnnotation()
+            .map(annotation -> "@Named(" + annotation + ")")
+            .orElse(""))
         .replace("$PARAMETERS_WITHOUT_TYPE", methodContainer.getParameters().stream()
             .map(x -> "_" + x.getSimpleName() + atomicInt.get())
             .collect(Collectors.joining(",")))

@@ -11,17 +11,21 @@ import java.util.List;
 @Value
 @Builder
 class TemplateData {
+
+  @NonNull ProcessingEnvironment processingEnv;
+
   @NonNull ResultType resultType;
   @NonNull Boolean isInterface;
-  @NonNull ProcessingEnvironment processingEnv;
   @NonNull String fullyQualifiedName;
   @NonNull String packageName;
   @NonNull String mapperName;
   @NonNull String mapperInterface;
-  @NonNull List<MethodContainer> lazyMethodContainers;
-  @NonNull List<String> imports;
   @NonNull String classInterface;
   @NonNull Boolean mapStructMapperTemplate;
+
+  @NonNull List<MethodContainer> lazyMethodContainers;
+  @NonNull List<String> imports;
+
 
   public static class TemplateDataBuilder {
     //for javadocs

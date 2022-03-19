@@ -39,32 +39,24 @@ public class LazyGenProcessor extends AbstractProcessor {
   }
 
   private TemplateData collectData(RoundEnvironment roundEnv, Element root) {
-
     var elementUtils = processingEnv.getElementUtils();
     var realAnnotation = root.getAnnotation(GenerateLazyClass.class);
     var dataCollector = new LazyGenDataCollector();
 
     var oldFullyQualifiedName = root.toString();
     var oldGeneratorName = root.getSimpleName();
-    var isInterface = ElementKind.INTERFACE == root.getKind();
     var newGeneratorName = oldGeneratorName + "Lazy";
-
-    var packageName = dataCollector.getPackageName(elementUtils, oldFullyQualifiedName);
-    var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root);
-    var importList = dataCollector.getImportList(oldFullyQualifiedName);
-
-    var newFullyQualifiedName = oldFullyQualifiedName.replace(oldGeneratorName, newGeneratorName);
 
     return generateTemplateData(realAnnotation.value())
         .resultType(realAnnotation.value())
-        .isInterface(isInterface)
+        .isInterface(ElementKind.INTERFACE == root.getKind())
         .processingEnv(processingEnv)
-        .fullyQualifiedName(newFullyQualifiedName)
-        .packageName(packageName)
+        .fullyQualifiedName(oldFullyQualifiedName.replace(oldGeneratorName, newGeneratorName))
+        .packageName(dataCollector.getPackageName(elementUtils, oldFullyQualifiedName))
         .mapperName(newGeneratorName)
         .mapperInterface(oldGeneratorName.toString())
-        .lazyMethodContainers(lazyMethods)
-        .imports(importList)
+        .lazyMethodContainers(dataCollector.getLazyMethods(roundEnv, elementUtils, root))
+        .imports(dataCollector.getImportList(oldFullyQualifiedName))
         .build();
   }
 

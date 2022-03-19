@@ -42,7 +42,7 @@ class LazyGenDataCollector {
     return MethodContainer.builder()
         .methodName(lazyMethod.getSimpleName().toString())
         .methodOriginClass(methodOriginClass)
-        .foundNamed(foundNamed)
+        .namedAnnotation(foundNamed)
         .parameters(method.getParameterTypes().stream()
             .map(parameterType -> elementUtils.getTypeElement(parameterType.toString()))
             .toList())
