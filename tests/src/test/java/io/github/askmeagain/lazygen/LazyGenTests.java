@@ -1,6 +1,10 @@
 package io.github.askmeagain.lazygen;
 
-import io.github.askmeagain.lazygen.complexcalculator.LazyTestCalculatorImpl;
+import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
+import io.github.askmeagain.lazygen.calculator.complex.LazyTestCalculatorImpl;
+import io.github.askmeagain.lazygen.calculator.simple.*;
+import io.github.askmeagain.lazygen.calculator.simple.deepabstract.TestNormalDeepDeepAbstractClass;
+import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.LazyDuplicateClass;
 import io.github.askmeagain.lazygen.input.Input;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,4 +114,35 @@ class LazyGenTests {
     Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
   }
 
+
+  @Test
+  void abstractDeepClassResult() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new TestNormalDeepDeepAbstractClass();
+
+    //Act ------------------------------------------------------------------------------------
+    lazyNormalClass.abc();
+    lazyNormalClass.abc();
+    lazyNormalClass.abc();
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
+  }
+
+  @Test
+  void abstractDuplicateMethod() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new LazyDuplicateClass();
+
+    //Act ------------------------------------------------------------------------------------
+    lazyNormalClass.abc();
+    lazyNormalClass.abc();
+    lazyNormalClass.abc();
+    lazyNormalClass.abc("a");
+    lazyNormalClass.abc("a");
+    lazyNormalClass.abc("a");
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(2, LazyGenTestUtils.atomicInteger.get());
+  }
 }

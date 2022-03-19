@@ -1,7 +1,7 @@
-package io.github.askmeagain.lazygen.complexcalculator;
+package io.github.askmeagain.lazygen.calculator.complex;
 
-import io.github.askmeagain.lazygen.LazyGenTestUtils;
 import io.github.askmeagain.lazygen.annotations.LazyGen;
+import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
 import io.github.askmeagain.lazygen.output.Multiplications;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

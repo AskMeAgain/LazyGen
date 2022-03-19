@@ -1,10 +1,10 @@
-package io.github.askmeagain.lazygen.complexcalculator;
+package io.github.askmeagain.lazygen.calculator.complex;
 
 import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.annotations.LazyGenInput;
+import io.github.askmeagain.lazygen.annotations.ResultType;
 import io.github.askmeagain.lazygen.input.Input;
 import io.github.askmeagain.lazygen.output.ComplexOutputs;
-import io.github.askmeagain.lazygen.other.ResultType;
 import org.mapstruct.Mapping;
 
 @GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)

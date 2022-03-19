@@ -1,8 +1,9 @@
-package io.github.askmeagain.lazygen;
+package io.github.askmeagain.lazygen.calculator.simple;
 
 import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.annotations.LazyGen;
-import io.github.askmeagain.lazygen.other.ResultType;
+import io.github.askmeagain.lazygen.annotations.ResultType;
+import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
@@ -10,7 +11,7 @@ import org.mapstruct.Named;
 public abstract class MapstructAbstractClass {
 
   @Mapping(target = ".", source = "input", qualifiedByName = "a")
-  abstract String map(String input);
+  public abstract String map(String input);
 
   @LazyGen
   @Named("a")

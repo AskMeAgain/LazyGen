@@ -1,6 +1,6 @@
-package io.github.askmeagain.lazygen.other;
+package io.github.askmeagain.lazygen.internals;
 
-public class LazyGenData {
+public class LazyGenTemplates {
 
   public static final String LAZY_INPUT_INTERFACE_PATH = "io.github.askmeagain.lazygen.annotations.LazyGenInput";
   public static final String MAPSTRUCT_GENERATOR_ANNOTATION_PATH = "io.github.askmeagain.lazygen.annotations.GenerateLazyClass";

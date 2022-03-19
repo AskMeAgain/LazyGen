@@ -1,4 +1,4 @@
-package io.github.askmeagain.lazygen.other;
+package io.github.askmeagain.lazygen.annotations;
 
 public enum ResultType {
   CLASS, ABSTRACT_CLASS, MAPSTRUCT_COMPATIBLE

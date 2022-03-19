@@ -1,9 +1,10 @@
-package io.github.askmeagain.lazygen;
+package io.github.askmeagain.lazygen.calculator.simple;
 
 import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
 import io.github.askmeagain.lazygen.annotations.LazyGen;
+import io.github.askmeagain.lazygen.annotations.ResultType;
+import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
 import io.github.askmeagain.lazygen.output.Outputs;
-import io.github.askmeagain.lazygen.other.ResultType;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 

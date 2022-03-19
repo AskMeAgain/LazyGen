@@ -1,4 +1,4 @@
-package io.github.askmeagain.lazygen.other;
+package io.github.askmeagain.lazygen.internals;
 
 import lombok.Builder;
 import lombok.NonNull;
