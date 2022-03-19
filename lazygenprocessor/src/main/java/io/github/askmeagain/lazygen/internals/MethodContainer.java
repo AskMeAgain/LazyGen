@@ -9,7 +9,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class LazyMethodContainer {
+class MethodContainer {
 
   @NonNull Boolean isMapstruct;
   @NonNull String methodOriginClass;

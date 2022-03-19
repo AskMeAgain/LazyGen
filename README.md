@@ -35,17 +35,6 @@ Note: The code gen relies on the `@Named` annotation. You can only make `@Named`
 2. Add `@LazyGen` to any `@Named` method
 3. Get your MapStruct mapper via `Mappers.getMapper(LazyXXXXXX.class);`
 
-### LazyGenInput\<T>
-
-The LazyGen annotation processor will search for a method called "map" and an interface `LazyGenInput<T>` on the
-class/interface marked with `@GenerateLazyClass`
-and will add a calculation method, which maps from the LazyGenInput generic type to the map output type. If all your
-mapping methods have the calculator as type, it allows you to create a composable "Calculator", which is super efficient
-and allows you to reference your own methods in a lazy way.
-
-See [TestCalculator.java](tests/src/main/java/io/github/askmeagain/lazygen/calculator/complex/TestCalculator.java) for
-an example.
-
 ## Examples
 
 ### Simple Example
@@ -122,53 +111,6 @@ an example.
             return _a;
         }
         private java.lang.String _a;
-    }
-
-</p>
-</details>
-
-### LazyGenInput\<T>
-
-<details><summary>Before</summary>
-<p>
-
-    @GenerateLazyClass(ResultType.CLASS)
-    public class NormalClassWithInput implements LazyGenInput<Input> {
-    
-        @LazyGen
-        String map(NormalClassWithInput instance){
-            return "Test";
-        }
-    }
-
-</p>
-</details>
-
-<details><summary>After</summary>
-<p>
-
-    public class  LazyNormalClassWithInput extends NormalClassWithInput {
-        private Input inputs;
-        
-        @Override
-        public Input getInputs(){
-            return inputs;
-        }
-        
-        public String calculate(Input inputs){
-            this.inputs = inputs;
-            return map(this);
-        }
-    
-        @Override
-        public java.lang.String map(io.github.askmeagain.lazygen.calculator.simple.NormalClassWithInput _NormalClassWithInput0) {
-            if (_map != null) {
-                return _map;
-            }
-            _map = super.map(_NormalClassWithInput0);
-            return _map;
-        }
-        private java.lang.String _map;
     }
 
 </p>

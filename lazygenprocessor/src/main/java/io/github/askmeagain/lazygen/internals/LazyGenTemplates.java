@@ -1,9 +1,8 @@
 package io.github.askmeagain.lazygen.internals;
 
-public class LazyGenTemplates {
+class LazyGenTemplates {
 
-  public static final String LAZY_INPUT_INTERFACE_PATH = "io.github.askmeagain.lazygen.annotations.LazyGenInput";
-  public static final String MAPSTRUCT_GENERATOR_ANNOTATION_PATH = "io.github.askmeagain.lazygen.annotations.GenerateLazyClass";
+  public static final String MAPSTRUCT_GENERATOR_ANNOTATION_PATH = "io.github.askmeagain.lazygen.annotation.GenerateLazyClass";
 
   public static final String MAPPER_TEMPLATE = """
       package $PACKAGE;
@@ -12,24 +11,10 @@ public class LazyGenTemplates {
 
       $MAPSTRUCT
       public $CLASS_INTERFACE $MAPPER_NAME $EXTENDS_IMPLEMENTS $MAPPER_INTERFACE {
-      $INPUT_METHOD
+
       $LAZY_METHODS
       }
        """;
-
-  public static String INPUT_TEMPLATE = """
-        private $INPUT_TYPE inputs;
-  
-        @Override
-        public $INPUT_TYPE getInputs(){
-          return inputs;
-        }
-  
-        public $OUTPUT_TYPE calculate($INPUT_TYPE inputs){
-          this.inputs = inputs;
-          return map(this);
-        }
-      """;
 
   public static String LAZY_METHOD_TEMPLATE = """
         $NAMED

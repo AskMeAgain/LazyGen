@@ -1,8 +1,7 @@
-package io.github.askmeagain.lazygen;
+package io.github.askmeagain.lazygen.internals;
 
-import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
-import io.github.askmeagain.lazygen.internals.LazyProcessorWriter;
-import io.github.askmeagain.lazygen.internals.LazyTemplateData;
+import io.github.askmeagain.lazygen.annotation.GenerateLazyClass;
+import io.github.askmeagain.lazygen.annotation.ResultType;
 import lombok.SneakyThrows;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -39,7 +38,7 @@ public class LazyGenProcessor extends AbstractProcessor {
     return true;
   }
 
-  private LazyTemplateData collectData(RoundEnvironment roundEnv, Element root) {
+  private TemplateData collectData(RoundEnvironment roundEnv, Element root) {
 
     var elementUtils = processingEnv.getElementUtils();
     var realAnnotation = root.getAnnotation(GenerateLazyClass.class);
@@ -50,15 +49,13 @@ public class LazyGenProcessor extends AbstractProcessor {
     var isInterface = ElementKind.INTERFACE == root.getKind();
     var newGeneratorName = "Lazy" + oldGeneratorName;
 
-    var inputFullyQualifiedName = dataCollector.getInputFullyQualifiedName(root);
-    var outputFullyQualifiedName = dataCollector.getOutputFullyQualifiedName(root);
     var packageName = dataCollector.getPackageName(elementUtils, oldFullyQualifiedName);
     var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root, isInterface);
-    var importList = dataCollector.getImportList(inputFullyQualifiedName, outputFullyQualifiedName, oldFullyQualifiedName);
+    var importList = dataCollector.getImportList(oldFullyQualifiedName);
 
     var newFullyQualifiedName = oldFullyQualifiedName.replace(oldGeneratorName, newGeneratorName);
 
-    return LazyTemplateData.builder()
+    return generateTemplateData(realAnnotation.value())
         .resultType(realAnnotation.value())
         .isInterface(isInterface)
         .processingEnv(processingEnv)
@@ -66,10 +63,22 @@ public class LazyGenProcessor extends AbstractProcessor {
         .packageName(packageName)
         .mapperName(newGeneratorName)
         .mapperInterface(oldGeneratorName.toString())
-        .inputType(inputFullyQualifiedName.map(name -> elementUtils.getTypeElement(name).getSimpleName().toString()))
-        .outputType(outputFullyQualifiedName.map(name -> elementUtils.getTypeElement(name).getSimpleName().toString()))
         .lazyMethodContainers(lazyMethods)
         .imports(importList)
         .build();
+  }
+
+  private static TemplateData.TemplateDataBuilder generateTemplateData(ResultType resultType) {
+    return switch (resultType) {
+      case ABSTRACT_CLASS -> TemplateData.builder()
+          .classInterface("abstract class ")
+          .mapStructMapperTemplate(false);
+      case CLASS -> TemplateData.builder()
+          .classInterface("class ")
+          .mapStructMapperTemplate(false);
+      case MAPSTRUCT_COMPATIBLE -> TemplateData.builder()
+          .classInterface("abstract class ")
+          .mapStructMapperTemplate(true);
+    };
   }
 }

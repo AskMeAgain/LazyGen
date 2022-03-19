@@ -1,26 +1,25 @@
 package io.github.askmeagain.lazygen.internals;
 
+import io.github.askmeagain.lazygen.annotation.ResultType;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import java.util.List;
 
 @Value
-@Builder(toBuilder = true)
-public class TemplateData {
-
-  @NonNull String classInterface;
-  @NonNull Boolean extendsImplements;
-  @NonNull Boolean mapStructMapperTemplate;
-  @NonNull String inputMethod;
-  @NonNull String mapperName;
+@Builder
+class TemplateData {
+  @NonNull ResultType resultType;
+  @NonNull Boolean isInterface;
+  @NonNull ProcessingEnvironment processingEnv;
+  @NonNull String fullyQualifiedName;
   @NonNull String packageName;
+  @NonNull String mapperName;
   @NonNull String mapperInterface;
-  List<LazyMethodContainer> lazyMethodContainers;
-  List<@NonNull String> imports;
-
-  public static class TemplateDataBuilder {
-    //for java doc gradle plugin
-  }
+  @NonNull List<MethodContainer> lazyMethodContainers;
+  @NonNull List<String> imports;
+  @NonNull String classInterface;
+  @NonNull Boolean mapStructMapperTemplate;
 }

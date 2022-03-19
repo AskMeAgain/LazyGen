@@ -1,4 +1,4 @@
-rootProject.name = 'MapStructCalculator'
+rootProject.name = 'LazyGen'
 
 include('lazygenprocessor')
 include ('tests')

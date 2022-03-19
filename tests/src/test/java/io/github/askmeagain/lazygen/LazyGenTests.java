@@ -1,8 +1,11 @@
 package io.github.askmeagain.lazygen;
 
 import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
-import io.github.askmeagain.lazygen.calculator.complex.LazyTestCalculatorImpl;
-import io.github.askmeagain.lazygen.calculator.simple.*;
+import io.github.askmeagain.lazygen.calculator.complex.LazyMapStructCalculatorImpl;
+import io.github.askmeagain.lazygen.calculator.simple.LazyMapStructInterfaceImpl;
+import io.github.askmeagain.lazygen.calculator.simple.LazyMapstructAbstractClass;
+import io.github.askmeagain.lazygen.calculator.simple.LazyNormalClass;
+import io.github.askmeagain.lazygen.calculator.simple.TestNormalAbstractClass;
 import io.github.askmeagain.lazygen.calculator.simple.deepabstract.TestNormalDeepDeepAbstractClass;
 import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.LazyDuplicateClass;
 import io.github.askmeagain.lazygen.input.Input;
@@ -21,11 +24,11 @@ class LazyGenTests {
   @Test
   void mapStructInput() {
     //Arrange --------------------------------------------------------------------------------
-    var calculator = new LazyTestCalculatorImpl();
+    var calculator = new LazyMapStructCalculatorImpl();
     var input = new Input(1);
 
     //Act ------------------------------------------------------------------------------------
-    var result = calculator.calculate(input);
+    var result = calculator.map(input);
 
     //Assert ---------------------------------------------------------------------------------
     var multiplications = result.getMultiplications();
@@ -79,22 +82,6 @@ class LazyGenTests {
     lazyNormalClass.abc();
     lazyNormalClass.abc();
     lazyNormalClass.abc();
-
-    //Assert ---------------------------------------------------------------------------------
-    Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
-  }
-
-  @Test
-  void classResultWithInput() {
-    //Arrange --------------------------------------------------------------------------------
-    var lazyNormalClass = new LazyNormalClassWithInput();
-    var input = new Input(1);
-
-    //Act ------------------------------------------------------------------------------------
-    lazyNormalClass.calculate(input);
-    lazyNormalClass.calculate(input);
-    lazyNormalClass.calculate(input);
-    lazyNormalClass.calculate(input);
 
     //Assert ---------------------------------------------------------------------------------
     Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());

@@ -1,8 +1,8 @@
 package io.github.askmeagain.lazygen.calculator.simple.duplicatemethod;
 
-import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
-import io.github.askmeagain.lazygen.annotations.LazyGen;
-import io.github.askmeagain.lazygen.annotations.ResultType;
+import io.github.askmeagain.lazygen.annotation.GenerateLazyClass;
+import io.github.askmeagain.lazygen.annotation.LazyGen;
+import io.github.askmeagain.lazygen.annotation.ResultType;
 import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
 
 @GenerateLazyClass(ResultType.CLASS)

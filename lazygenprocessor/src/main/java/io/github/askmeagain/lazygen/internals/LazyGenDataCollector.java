@@ -1,43 +1,33 @@
-package io.github.askmeagain.lazygen;
+package io.github.askmeagain.lazygen.internals;
 
-import io.github.askmeagain.lazygen.annotations.LazyGen;
-import io.github.askmeagain.lazygen.internals.LazyGenTemplates;
-import io.github.askmeagain.lazygen.internals.LazyMethodContainer;
+import io.github.askmeagain.lazygen.annotation.LazyGen;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ExecutableType;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import java.util.*;
 
-public class LazyGenDataCollector {
+class LazyGenDataCollector {
 
-  public ArrayList<String> getImportList(
-      Optional<String> inputFullyQualifiedName,
-      Optional<String> outputFullyQualifiedName,
-      String oldFullyQualifiedName
-  ) {
+  public ArrayList<String> getImportList(String oldFullyQualifiedName) {
     var importList = new ArrayList<String>();
 
     importList.add(oldFullyQualifiedName);
     importList.add("org.mapstruct.Mapper");
     importList.add("org.mapstruct.Named");
 
-    outputFullyQualifiedName.ifPresent(importList::add);
-    inputFullyQualifiedName.ifPresent(importList::add);
     return importList;
   }
 
-  public List<LazyMethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator, boolean isMapStruct) {
+  public List<MethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator, boolean isMapStruct) {
     var lazyMethods = roundEnv.getElementsAnnotatedWith(LazyGen.class);
 
     var interfaces = recursivelyGetChild(elementUtils, generator);
 
     var resultList = new ArrayList<Element>();
 
-    for (Element method : lazyMethods) {
+    for (var method : lazyMethods) {
       var parent = method.getEnclosingElement();
       if (interfaces.contains(parent.toString())) {
         resultList.add(method);
@@ -51,7 +41,7 @@ public class LazyGenDataCollector {
           if (isMapStruct) {
             methodOriginClass = generator.getSimpleName().toString() + ".";
           }
-          return LazyMethodContainer.builder()
+          return MethodContainer.builder()
               .methodName(lazyMethod.getSimpleName().toString())
               .methodOriginClass(methodOriginClass)
               .isMapstruct(isMapStruct)
@@ -92,23 +82,5 @@ public class LazyGenDataCollector {
     return elementUtils.getPackageOf(elementUtils.getTypeElement(oldFullyQualifiedName))
         .getQualifiedName()
         .toString();
-  }
-
-  public Optional<String> getInputFullyQualifiedName(Element generatorRoot) {
-    var generatorRootTypeElement = (TypeElement) generatorRoot;
-
-    return generatorRootTypeElement.getInterfaces().stream()
-        .map(TypeMirror::toString)
-        .filter(x -> x.startsWith(LazyGenTemplates.LAZY_INPUT_INTERFACE_PATH))
-        .map(x -> x.substring(x.indexOf('<') + 1, x.length() - 1))
-        .findFirst();
-  }
-
-  public Optional<String> getOutputFullyQualifiedName(Element generatorRoot) {
-    return generatorRoot.getEnclosedElements().stream()
-        .filter(x -> x.getSimpleName().toString().equals("map"))
-        .map(x -> (ExecutableType) x.asType())
-        .map(x -> x.getReturnType().toString())
-        .findFirst();
   }
 }
