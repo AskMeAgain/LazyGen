@@ -3,7 +3,6 @@ plugins {
 }
 
 group 'io.github.askmeagain'
-version '0.0.1-SNAPSHOT'
 
 if (gradle.startParameter.taskNames.contains('publishMavenPublicationToMavenCentralRepository')) {
     rootProject.extensions.add("release-version", System.getenv("RELEASE_VERSION"))
