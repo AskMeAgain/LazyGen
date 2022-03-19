@@ -10,9 +10,6 @@ apply from: "${rootDir}/gradle/publish.gradle"
 
 repositories {
     mavenCentral()
-    maven {
-        url 'https://s01.oss.sonatype.org/content/repositories/staging/'
-    }
 }
 
 dependencies {

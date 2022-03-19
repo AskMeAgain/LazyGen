@@ -4,6 +4,9 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://s01.oss.sonatype.org/content/repositories/staging/'
+    }
 }
 
 dependencies {
@@ -22,6 +25,8 @@ dependencies {
 
     annotationProcessor project(':lazygenprocessor')
     implementation project(':lazygenprocessor')
+//    annotationProcessor "io.github.askmeagain:lazygenprocessor:0.0.2"
+//    implementation "io.github.askmeagain:lazygenprocessor:0.0.2"
 }
 
 test {
