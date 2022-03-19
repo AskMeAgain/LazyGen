@@ -3,7 +3,7 @@ import com.vanniktech.maven.publish.JavadocJar
 
 plugins {
     id 'java-library'
-    id 'com.vanniktech.maven.publish.base' version "0.18.0"
+    id 'com.vanniktech.maven.publish.base' version "${vanniktech_publish_version}"
 }
 
 apply from: "${rootDir}/gradle/publish.gradle"
@@ -16,8 +16,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.22'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    compileOnly "org.projectlombok:lombok:${lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${lombok_version}"
 }
 
 test {
