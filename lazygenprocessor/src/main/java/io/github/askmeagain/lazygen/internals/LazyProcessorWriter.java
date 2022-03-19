@@ -39,9 +39,11 @@ class LazyProcessorWriter {
 
   private static String computeMethodTemplate(MethodContainer methodContainer) {
     var atomicInt = new AtomicInteger();
+
     return LazyGenTemplates.LAZY_METHOD_TEMPLATE
-        .replace("$NAMED", methodContainer.getIsMapstruct() ? "@Named(\"$METHOD_NAME\")" : "")
+        .replace("$NAMED", methodContainer.getIsMapstruct() && methodContainer.getFoundNamed().isPresent() ? "@Named($NAMED_FOUND)" : "")
         .replace("$LAZY_FIELD_NAME", getLazyFieldName(methodContainer))
+        .replace("$NAMED_FOUND", methodContainer.getFoundNamed().orElse(""))
         .replace("$METHOD_NAME", methodContainer.getMethodName())
         .replace("$METHOD_ORIGIN_CLASS", methodContainer.getMethodOriginClass())
         .replace("$PARAMETERS_WITHOUT_TYPE", methodContainer.getParameters().stream()

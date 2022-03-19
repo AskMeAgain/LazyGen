@@ -6,12 +6,14 @@ import lombok.Value;
 
 import javax.lang.model.element.TypeElement;
 import java.util.List;
+import java.util.Optional;
 
 @Value
 @Builder
 class MethodContainer {
 
   @NonNull Boolean isMapstruct;
+  @NonNull Optional<String> foundNamed;
   @NonNull String methodOriginClass;
   @NonNull String methodName;
   @NonNull String outputType;

@@ -11,11 +11,11 @@ import org.mapstruct.Named;
 @GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)
 public interface MapStructInterface {
 
-  @Mapping(target = "output", source = "input", qualifiedByName = "a")
+  @Mapping(target = "output", source = "input", qualifiedByName = "another_name")
   Outputs map(String input);
 
   @LazyGen
-  @Named("a")
+  @Named("another_name")
   default String a(String input) {
     LazyGenTestUtils.atomicInteger.getAndIncrement();
     return "a";

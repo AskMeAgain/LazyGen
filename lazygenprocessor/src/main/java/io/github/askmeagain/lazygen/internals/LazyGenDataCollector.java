@@ -21,37 +21,37 @@ class LazyGenDataCollector {
   }
 
   public List<MethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator, boolean isMapStruct) {
-    var lazyMethods = roundEnv.getElementsAnnotatedWith(LazyGen.class);
-
     var interfaces = recursivelyGetChild(elementUtils, generator);
 
-    var resultList = new ArrayList<Element>();
-
-    for (var method : lazyMethods) {
-      var parent = method.getEnclosingElement();
-      if (interfaces.contains(parent.toString())) {
-        resultList.add(method);
-      }
-    }
-
-    return resultList.stream()
-        .map(lazyMethod -> {
-          var method = ((ExecutableType) lazyMethod.asType());
-          var methodOriginClass = "";
-          if (isMapStruct) {
-            methodOriginClass = generator.getSimpleName().toString() + ".";
-          }
-          return MethodContainer.builder()
-              .methodName(lazyMethod.getSimpleName().toString())
-              .methodOriginClass(methodOriginClass)
-              .isMapstruct(isMapStruct)
-              .parameters(method.getParameterTypes().stream()
-                  .map(y -> elementUtils.getTypeElement(y.toString()))
-                  .toList())
-              .outputType(method.getReturnType().toString())
-              .build();
-        })
+    return roundEnv.getElementsAnnotatedWith(LazyGen.class).stream()
+        .filter(x -> interfaces.contains(x.getEnclosingElement().toString()))
+        .map(lazyMethod -> fillMethodContainer(elementUtils, generator, lazyMethod, isMapStruct))
         .toList();
+  }
+
+  public MethodContainer fillMethodContainer(Elements elementUtils, Element generator, Element lazyMethod, Boolean isMapStruct) {
+    var method = ((ExecutableType) lazyMethod.asType());
+    var methodOriginClass = "";
+    Optional<String> foundNamed = Optional.empty();
+
+    if (isMapStruct) {
+      methodOriginClass = generator.getSimpleName().toString() + ".";
+      foundNamed = lazyMethod.getAnnotationMirrors().stream()
+          .map(Object::toString)
+          .filter(x -> x.startsWith("@org.mapstruct.Named"))
+          .map(x -> x.substring(x.indexOf("(") + 1, x.indexOf(")")))
+          .findFirst();
+    }
+    return MethodContainer.builder()
+        .methodName(lazyMethod.getSimpleName().toString())
+        .methodOriginClass(methodOriginClass)
+        .isMapstruct(isMapStruct)
+        .foundNamed(foundNamed)
+        .parameters(method.getParameterTypes().stream()
+            .map(parameterType -> elementUtils.getTypeElement(parameterType.toString()))
+            .toList())
+        .outputType(method.getReturnType().toString())
+        .build();
   }
 
   public Set<String> recursivelyGetChild(Elements elementUtils, Element generator) {

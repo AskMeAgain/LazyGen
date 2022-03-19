@@ -22,4 +22,8 @@ class TemplateData {
   @NonNull List<String> imports;
   @NonNull String classInterface;
   @NonNull Boolean mapStructMapperTemplate;
+
+  public static class TemplateDataBuilder {
+    //for javadocs
+  }
 }
