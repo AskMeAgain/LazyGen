@@ -1,36 +1,41 @@
 # LazyGen
 
-This annotation processor is designed to add LazyMethods to any method marked with an annotation
-by generating a new Class which inherites the original behaviour.
+This annotation processor adds a lazy¹ method to any non-final method annotated with `@LazyGen` via code generation.
+
+¹ Lazy/Cacheable is a method which only executes its body once and keeps a copy of the result in memory
 
 ## Getting Started
 
 1. Add LazyGen annotation processor to your project
-2. Add @GenerateLazyClass(ResultType.XXX) to a class which should have lazy methods
+2. Add `@GenerateLazyClass(ResultType.XXX)` to a class (or interface in case
+   of [MapStruct mapper](https://github.com/mapstruct/mapstruct))
 3. Specify how your result should look like:
-   1. **ResultType.CLASS**: Creates a normal class which extends the original class
-   2. **ResultType.ABSTRACT_CLASS**: creates an abstract class which extends/implements the interface
-   3. **ResultType.MAPSTRUCT_COMPATIBLE**: Creates an abstract class, prepared correctly for usage with MapStruct
-4. Add @LazyGen to any method on this class and (sub)(sub)interfaces
+    1. `ResultType.CLASS`: Creates a normal class which extends the original class
+    2. `ResultType.ABSTRACT_CLASS`: Creates an abstract class which extends/implements the interface
+    3. `ResultType.MAPSTRUCT_COMPATIBLE`: Creates an abstract class, prepared correctly for usage with
+       [MapStruct](https://github.com/mapstruct/mapstruct)
+4. Add `@LazyGen` to any method on this class and any childs (class or interface doesnt matter)
 5. Hit build
 6. A class is generated which inherits the original class, prefixed with Lazy
 
 ## Making MapStruct lazy
 
-Note: The code gen relies on the @Named annotation. You can only make @Named methods lazy
+Note: The code gen relies on the `@Named` annotation. You can only make `@Named` methods lazy
 
-1. Add `@GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)` to your mapstruct mapper 
+1. Add `@GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)` to your mapstruct mapper
 2. Add `@LazyGen` to any `@Named` method
-3. Get your MapStruct mapper via Mappers.getMapper(LazyXXXXXX.class);
+3. Get your MapStruct mapper via `Mappers.getMapper(LazyXXXXXX.class);`
 
-### LazyGenInput\<T> 
+### LazyGenInput\<T>
 
-The LazyGen annotation processor will search for a method called "map" and an interface LazyGenInput on the class/interface marked
-with @GenerateLazyClass
-and will add a calculation method, which maps from the LazyGenInput generic type
-to the map output type. If all your mapping methods have the calculator as type,
-it allows you to create a composable "Calculator", which is super efficient and allows you
-to reference your own methods in a lazy way 
+The LazyGen annotation processor will search for a method called "map" and an interface `LazyGenInput<T>` on the
+class/interface marked with `@GenerateLazyClass`
+and will add a calculation method, which maps from the LazyGenInput generic type to the map output type. If all your
+mapping methods have the calculator as type, it allows you to create a composable "Calculator", which is super efficient
+and allows you to reference your own methods in a lazy way.
+
+See [TestCalculator.java](tests/src/main/java/io/github/askmeagain/lazygen/calculator/complex/TestCalculator.java) for
+an example.
 
 ## Examples
 
