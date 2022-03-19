@@ -4,9 +4,18 @@ This annotation processor adds a lazy¹ method to any non-final method annotated
 
 ¹ Lazy/Cacheable is a method which only executes its body once and keeps a copy of the result in memory
 
+## Maven Dependency
+
+    <dependency>
+        <groupId>io.github.askmeagain</groupId>
+        <artifactId>lazygenprocessor</artifactId>
+        <version>0.0.2</version>
+        <type>module</type>
+    </dependency>
+
 ## Getting Started
 
-1. Add LazyGen annotation processor to your project
+1. Add LazyGen package and annotation processor to your project
 2. Add `@GenerateLazyClass(ResultType.XXX)` to a class (or interface in case
    of [MapStruct mapper](https://github.com/mapstruct/mapstruct))
 3. Specify how your result should look like:
