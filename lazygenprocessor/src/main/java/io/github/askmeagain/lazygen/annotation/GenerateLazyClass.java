@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks this class as the origin for all generated methods marked via @LazyGen of superclasses & interfaces
+ * Marks this class as the origin for all generated methods marked via @LazyGen of superclasses and interfaces
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)

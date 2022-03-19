@@ -26,7 +26,6 @@ class TemplateData {
   @NonNull List<MethodContainer> lazyMethodContainers;
   @NonNull List<String> imports;
 
-
   public static class TemplateDataBuilder {
     //for javadocs
   }

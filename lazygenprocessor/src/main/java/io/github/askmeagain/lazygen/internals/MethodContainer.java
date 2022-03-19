@@ -18,4 +18,7 @@ class MethodContainer {
   @NonNull String outputType;
   @NonNull List<@NonNull TypeElement> parameters;
 
+  public static class MethodContainerBuilder {
+    //for javadoc
+  }
 }
