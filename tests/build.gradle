@@ -21,7 +21,6 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
 
     annotationProcessor project(':lazygenprocessor')
-
     implementation project(':lazygenprocessor')
 }
 
