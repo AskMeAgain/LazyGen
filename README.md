@@ -32,8 +32,9 @@ This annotation processor adds a lazy¹ method to any non-final method annotated
 Note: The code gen relies on the `@Named` annotation. You can only make `@Named` methods lazy
 
 1. Add `@GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)` to your mapstruct mapper
-2. Add `@LazyGen` to any `@Named` method
-3. Get your MapStruct mapper via `Mappers.getMapper(LazyXXXXXX.class);`
+2. Remove `@Mapper` annotation from your MapStruct mapper
+3. Add `@LazyGen` to any `@Named` method
+4. Get your MapStruct mapper via `Mappers.getMapper(LazyXXXXXX.class);`
 
 ## Examples
 
