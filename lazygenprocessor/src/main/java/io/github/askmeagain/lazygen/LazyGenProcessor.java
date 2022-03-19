@@ -1,7 +1,7 @@
 package io.github.askmeagain.lazygen;
 
-import io.github.askmeagain.lazygen.annotations.LazyGen;
 import io.github.askmeagain.lazygen.annotations.GenerateLazyClass;
+import io.github.askmeagain.lazygen.annotations.LazyGen;
 import io.github.askmeagain.lazygen.other.LazyGenData;
 import io.github.askmeagain.lazygen.other.LazyMethodContainer;
 import io.github.askmeagain.lazygen.other.LazyProcessorWriter;

@@ -1,0 +1,37 @@
+plugins.withId("com.vanniktech.maven.publish.base") {
+
+    group = "io.github.askmeagain"
+    //version = rootProject.extensions.getByName("release-version")
+    version = "0.0.1-SNAPSHOT"
+    mavenPublishing {
+        publishToMavenCentral("S01")
+
+        signAllPublications()
+
+        pom {
+            name = project.name
+            description = "A description of what my library does."
+            inceptionYear = "2022"
+            url = "https://github.com/AskMeAgain/LazyGen"
+            licenses {
+                license {
+                    name = "MIT License"
+                    url = "https://opensource.org/licenses/MIT"
+                    distribution = "https://opensource.org/licenses/MIT"
+                }
+            }
+            developers {
+                developer {
+                    id = "AskMeAgain"
+                    name = "AskMeAgain"
+                    url = "https://github.com/AskMeAgain/"
+                }
+            }
+            scm {
+                url = "https://github.com/AskMeAgain/LazyGen/"
+                connection = "scm:git:git://github.com/AskMeAgain/LazyGen.git"
+                developerConnection = "scm:git:ssh://git@github.com/AskMeAgain/LazyGen.git"
+            }
+        }
+    }
+}

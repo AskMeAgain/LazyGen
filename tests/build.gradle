@@ -3,6 +3,7 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -20,9 +21,8 @@ dependencies {
 
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
-    annotationProcessor project(':annotationprocessor')
-
-    implementation project(':annotationprocessor')
+    annotationProcessor 'io.github.askmeagain:lazygenprocessor:0.0.1-SNAPSHOT'
+    implementation 'io.github.askmeagain:lazygenprocessor:0.0.1-SNAPSHOT'
 }
 
 test {

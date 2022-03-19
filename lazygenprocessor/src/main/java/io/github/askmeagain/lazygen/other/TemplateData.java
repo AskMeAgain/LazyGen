@@ -20,4 +20,7 @@ public class TemplateData {
   List<LazyMethodContainer> lazyMethodContainers;
   List<@NonNull String> imports;
 
+  public static class TemplateDataBuilder {
+    //for java doc gradle plugin
+  }
 }

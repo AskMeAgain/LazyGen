@@ -1,4 +1,4 @@
 rootProject.name = 'MapStructCalculator'
 
-include ('annotationprocessor')
+include('lazygenprocessor')
 include ('tests')
