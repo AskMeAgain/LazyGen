@@ -1,13 +1,13 @@
 package io.github.askmeagain.lazygen;
 
 import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
-import io.github.askmeagain.lazygen.calculator.complex.LazyMapStructCalculatorImpl;
-import io.github.askmeagain.lazygen.calculator.simple.LazyMapStructInterfaceImpl;
-import io.github.askmeagain.lazygen.calculator.simple.LazyMapstructAbstractClass;
-import io.github.askmeagain.lazygen.calculator.simple.LazyNormalClass;
+import io.github.askmeagain.lazygen.calculator.complex.MapStructCalculatorLazy;
+import io.github.askmeagain.lazygen.calculator.simple.MapStructInterfaceLazy;
+import io.github.askmeagain.lazygen.calculator.simple.MapstructAbstractClassLazy;
+import io.github.askmeagain.lazygen.calculator.simple.NormalClassLazy;
 import io.github.askmeagain.lazygen.calculator.simple.TestNormalAbstractClass;
 import io.github.askmeagain.lazygen.calculator.simple.deepabstract.TestNormalDeepDeepAbstractClass;
-import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.LazyDuplicateClass;
+import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.DuplicateClassLazy;
 import io.github.askmeagain.lazygen.input.Input;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ class LazyGenTests {
   @Test
   void mapStructInput() {
     //Arrange --------------------------------------------------------------------------------
-    var calculator = new LazyMapStructCalculatorImpl();
+    var calculator = Mappers.getMapper(MapStructCalculatorLazy.class);
     var input = new Input(1);
 
     //Act ------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ class LazyGenTests {
   @Test
   void mapStructInterface() {
     //Arrange --------------------------------------------------------------------------------
-    var lazyNormalClass = new LazyMapStructInterfaceImpl();
+    var lazyNormalClass = Mappers.getMapper(MapStructInterfaceLazy.class);
 
     //Act ------------------------------------------------------------------------------------
     lazyNormalClass.map("a");
@@ -62,12 +62,13 @@ class LazyGenTests {
   @Test
   void mapStructAbstractClass() {
     //Arrange --------------------------------------------------------------------------------
-    var lazyNormalClass = Mappers.getMapper(LazyMapstructAbstractClass.class);
+    var lazyNormalClass = Mappers.getMapper(MapstructAbstractClassLazy.class);
+    var input = new Input(1);
 
     //Act ------------------------------------------------------------------------------------
-    lazyNormalClass.map("a");
-    lazyNormalClass.map("a");
-    lazyNormalClass.map("a");
+    lazyNormalClass.map(input);
+    lazyNormalClass.map(input);
+    lazyNormalClass.map(input);
 
     //Assert ---------------------------------------------------------------------------------
     Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
@@ -76,7 +77,7 @@ class LazyGenTests {
   @Test
   void classResult() {
     //Arrange --------------------------------------------------------------------------------
-    var lazyNormalClass = new LazyNormalClass();
+    var lazyNormalClass = new NormalClassLazy();
 
     //Act ------------------------------------------------------------------------------------
     lazyNormalClass.abc();
@@ -119,7 +120,7 @@ class LazyGenTests {
   @Test
   void abstractDuplicateMethod() {
     //Arrange --------------------------------------------------------------------------------
-    var lazyNormalClass = new LazyDuplicateClass();
+    var lazyNormalClass = new DuplicateClassLazy();
 
     //Act ------------------------------------------------------------------------------------
     lazyNormalClass.abc();

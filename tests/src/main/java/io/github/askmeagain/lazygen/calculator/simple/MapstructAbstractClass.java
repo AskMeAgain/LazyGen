@@ -4,18 +4,20 @@ import io.github.askmeagain.lazygen.annotation.GenerateLazyClass;
 import io.github.askmeagain.lazygen.annotation.LazyGen;
 import io.github.askmeagain.lazygen.annotation.ResultType;
 import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
+import io.github.askmeagain.lazygen.input.Input;
+import io.github.askmeagain.lazygen.output.Outputs;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)
 public abstract class MapstructAbstractClass {
 
-  @Mapping(target = ".", source = "input", qualifiedByName = "a")
-  public abstract String map(String input);
+  @Mapping(target = "output", source = "input", qualifiedByName = "different_name")
+  public abstract Outputs map(Input input);
 
   @LazyGen
-  @Named("a")
-  public String a() {
+  @Named("different_name")
+  String a(Input input) {
     LazyGenTestUtils.atomicInteger.getAndIncrement();
     return "a";
   }

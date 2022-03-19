@@ -47,10 +47,10 @@ public class LazyGenProcessor extends AbstractProcessor {
     var oldFullyQualifiedName = root.toString();
     var oldGeneratorName = root.getSimpleName();
     var isInterface = ElementKind.INTERFACE == root.getKind();
-    var newGeneratorName = "Lazy" + oldGeneratorName;
+    var newGeneratorName = oldGeneratorName + "Lazy";
 
     var packageName = dataCollector.getPackageName(elementUtils, oldFullyQualifiedName);
-    var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root, isInterface);
+    var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root);
     var importList = dataCollector.getImportList(oldFullyQualifiedName);
 
     var newFullyQualifiedName = oldFullyQualifiedName.replace(oldGeneratorName, newGeneratorName);

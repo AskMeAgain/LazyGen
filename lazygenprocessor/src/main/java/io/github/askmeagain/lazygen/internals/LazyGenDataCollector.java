@@ -20,32 +20,28 @@ class LazyGenDataCollector {
     return importList;
   }
 
-  public List<MethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator, boolean isMapStruct) {
+  public List<MethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator) {
     var interfaces = recursivelyGetChild(elementUtils, generator);
 
     return roundEnv.getElementsAnnotatedWith(LazyGen.class).stream()
         .filter(x -> interfaces.contains(x.getEnclosingElement().toString()))
-        .map(lazyMethod -> fillMethodContainer(elementUtils, generator, lazyMethod, isMapStruct))
+        .map(lazyMethod -> fillMethodContainer(elementUtils, generator, lazyMethod))
         .toList();
   }
 
-  public MethodContainer fillMethodContainer(Elements elementUtils, Element generator, Element lazyMethod, Boolean isMapStruct) {
+  public MethodContainer fillMethodContainer(Elements elementUtils, Element generator, Element lazyMethod) {
     var method = ((ExecutableType) lazyMethod.asType());
-    var methodOriginClass = "";
-    Optional<String> foundNamed = Optional.empty();
+    var methodOriginClass = generator.getSimpleName().toString() + ".";
 
-    if (isMapStruct) {
-      methodOriginClass = generator.getSimpleName().toString() + ".";
-      foundNamed = lazyMethod.getAnnotationMirrors().stream()
-          .map(Object::toString)
-          .filter(x -> x.startsWith("@org.mapstruct.Named"))
-          .map(x -> x.substring(x.indexOf("(") + 1, x.indexOf(")")))
-          .findFirst();
-    }
+    var foundNamed = lazyMethod.getAnnotationMirrors().stream()
+        .map(Object::toString)
+        .filter(x -> x.startsWith("@org.mapstruct.Named"))
+        .map(x -> x.substring(x.indexOf("(") + 1, x.indexOf(")")))
+        .findFirst();
+
     return MethodContainer.builder()
         .methodName(lazyMethod.getSimpleName().toString())
         .methodOriginClass(methodOriginClass)
-        .isMapstruct(isMapStruct)
         .foundNamed(foundNamed)
         .parameters(method.getParameterTypes().stream()
             .map(parameterType -> elementUtils.getTypeElement(parameterType.toString()))

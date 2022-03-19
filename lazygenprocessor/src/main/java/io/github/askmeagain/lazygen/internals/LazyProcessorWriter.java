@@ -30,22 +30,22 @@ class LazyProcessorWriter {
         .replace("$PACKAGE", lazyTemplateData.getPackageName())
         .replace("$MAPPER_INTERFACE", lazyTemplateData.getMapperInterface())
         .replace("$LAZY_METHODS", lazyTemplateData.getLazyMethodContainers().stream()
-            .map(LazyProcessorWriter::computeMethodTemplate)
+            .map(methodContainer -> computeMethodTemplate(methodContainer, lazyTemplateData))
             .collect(Collectors.joining("\n")))
         .replace("$IMPORT", lazyTemplateData.getImports().stream()
             .map(imports -> "import " + imports + ";")
             .collect(Collectors.joining("\n")));
   }
 
-  private static String computeMethodTemplate(MethodContainer methodContainer) {
+  private static String computeMethodTemplate(MethodContainer methodContainer, TemplateData lazyTemplateData) {
     var atomicInt = new AtomicInteger();
 
     return LazyGenTemplates.LAZY_METHOD_TEMPLATE
-        .replace("$NAMED", methodContainer.getIsMapstruct() && methodContainer.getFoundNamed().isPresent() ? "@Named($NAMED_FOUND)" : "")
+        .replace("$NAMED", methodContainer.getFoundNamed().isPresent() ? "@Named($NAMED_FOUND)" : "")
         .replace("$LAZY_FIELD_NAME", getLazyFieldName(methodContainer))
         .replace("$NAMED_FOUND", methodContainer.getFoundNamed().orElse(""))
         .replace("$METHOD_NAME", methodContainer.getMethodName())
-        .replace("$METHOD_ORIGIN_CLASS", methodContainer.getMethodOriginClass())
+        .replace("$METHOD_ORIGIN_CLASS", lazyTemplateData.getIsInterface() ? methodContainer.getMethodOriginClass() : "")
         .replace("$PARAMETERS_WITHOUT_TYPE", methodContainer.getParameters().stream()
             .map(x -> "_" + x.getSimpleName() + atomicInt.get())
             .collect(Collectors.joining(",")))

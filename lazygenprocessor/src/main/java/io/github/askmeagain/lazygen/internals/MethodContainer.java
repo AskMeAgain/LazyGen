@@ -12,7 +12,6 @@ import java.util.Optional;
 @Builder
 class MethodContainer {
 
-  @NonNull Boolean isMapstruct;
   @NonNull Optional<String> foundNamed;
   @NonNull String methodOriginClass;
   @NonNull String methodName;

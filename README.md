@@ -1,8 +1,9 @@
 # LazyGen
 
-This annotation processor adds a lazy¹ method to any non-final method annotated with `@LazyGen` via code generation.
+This annotation processor adds a lazy/cacheable method to any non-final method annotated with `@LazyGen` via code
+generation.
 
-¹ Lazy/Cacheable is a method which only executes its body once and keeps a copy of the result in memory
+A Lazy/Cacheable method is a method which only executes its body once and keeps a copy of the result in memory
 
 ## Maven Dependency
 
@@ -25,7 +26,7 @@ This annotation processor adds a lazy¹ method to any non-final method annotated
        [MapStruct](https://github.com/mapstruct/mapstruct)
 4. Add `@LazyGen` to any method on this class and any childs (class or interface doesnt matter)
 5. Hit build
-6. A class is generated which inherits the original class, prefixed with Lazy
+6. A class is generated which inherits the original class, with Lazy as suffix
 
 ## Making MapStruct lazy
 
@@ -34,7 +35,7 @@ Note: The code gen relies on the `@Named` annotation. You can only make `@Named`
 1. Add `@GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)` to your mapstruct mapper
 2. Remove `@Mapper` annotation from your MapStruct mapper
 3. Add `@LazyGen` to any `@Named` method
-4. Get your MapStruct mapper via `Mappers.getMapper(LazyXXXXXX.class);`
+4. Get your MapStruct mapper via `Mappers.getMapper(XXXXXXLazy.class);`
 
 ## Examples
 
