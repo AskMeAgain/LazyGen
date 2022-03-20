@@ -35,10 +35,10 @@ You can also specify how the caching should be implemented:
 * `ONE_TIME_USE`: returns always the same (cached) value, ignoring the input parameters
 * `MULTI_USE`: will cache the result of the method in a map based on a key. The key is calculated via
   `hashCode()` of the input parameters
-* `PARENT`: use what the @GenerateLazyClass specifies (by default ONE_TIME_USE)
+* `PARENT`: default on `@LazyGen` methods, use what the `@GenerateLazyClass` specified (by default `ONE_TIME_USE`)
 
-You can specify a general usage, via `@GenerateLazyClass(usage = ONE_TIME_USAGE)`, but each `@LazyGen` can override this
-behaviour by themselves.
+You can specify a general usage, via `@GenerateLazyClass(usage = ONE_TIME_USE)`, but each `@LazyGen` method can override
+this behaviour by themselves.
 
 ## Making MapStruct lazy
 
