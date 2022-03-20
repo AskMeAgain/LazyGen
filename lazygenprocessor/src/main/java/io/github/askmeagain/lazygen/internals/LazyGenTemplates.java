@@ -52,6 +52,7 @@ class LazyGenTemplates {
           var stringBuilder = new StringBuilder();
           for(int i = 0; i < params.length; i++){
             stringBuilder.append(params[i].hashCode());
+            stringBuilder.append("_");
           }
           return stringBuilder.toString();
         }

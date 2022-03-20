@@ -20,20 +20,33 @@ A Lazy/Cacheable method is a method which only executes its body once and keeps 
 2. Add `@GenerateLazyClass(ResultType.XXX)` to a class (or interface in case
    of [MapStruct mapper](https://github.com/mapstruct/mapstruct))
 3. Specify how your result should look like:
-    1. `ResultType.CLASS`: Creates a normal class which extends the original class
-    2. `ResultType.ABSTRACT_CLASS`: Creates an abstract class which extends/implements the interface
-    3. `ResultType.MAPSTRUCT_COMPATIBLE`: Creates an abstract class, prepared correctly for usage with
-       [MapStruct](https://github.com/mapstruct/mapstruct)
+   1. `ResultType.CLASS`: Creates a normal class which extends the original class
+   2. `ResultType.ABSTRACT_CLASS`: Creates an abstract class which extends/implements the interface
+   3. `ResultType.MAPSTRUCT_COMPATIBLE`: Creates an abstract class, prepared correctly for usage with
+      [MapStruct](https://github.com/mapstruct/mapstruct)
 4. Add `@LazyGen` to any method on this class and any childs (class or interface doesnt matter)
 5. Hit build
 6. A class is generated which inherits the original class, with Lazy as suffix
 
+## OneTimeUsage vs MultiUsage
+
+You can also specify how the caching should be implemented:
+
+* `ONE_TIME_USE`: returns always the same (cached) value, ignoring the input parameters
+* `MULTI_USE`: will cache the result of the method in a map based on a key. The key is calculated via
+  `hashCode()` of the input parameters
+* `PARENT`: use what the @GenerateLazyClass specifies (by default ONE_TIME_USE)
+
+You can specify a general usage, via `@GenerateLazyClass(usage = ONE_TIME_USAGE)`, but each `@LazyGen` can override this
+behaviour by themselves.
+
 ## Making MapStruct lazy
 
-Note: The code gen relies on the `@Named` annotation. You can only make `@Named` methods lazy
+Note: The code gen lazy override relies on the `@Named` annotation. You can only make `@Named` methods lazy for usage in
+mapstruct
 
 1. Add `@GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)` to your mapstruct mapper
-2. Remove `@Mapper` annotation from your MapStruct mapper
+2. Remove `@Mapper` annotation from your mapper
 3. Add `@LazyGen` to any `@Named` method
 4. Get your MapStruct mapper via `Mappers.getMapper(XXXXXXLazy.class);`
 
