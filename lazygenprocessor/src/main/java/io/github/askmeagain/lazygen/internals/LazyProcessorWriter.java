@@ -44,6 +44,7 @@ class LazyProcessorWriter {
 
   private static String computeMethodTemplate(MethodContainer methodContainer, TemplateData lazyTemplateData) {
     var atomicInt = new AtomicInteger();
+    var parameters = methodContainer.getParameters();
 
     var isMultiUse = methodContainer.getUsage() == LazyType.MULTI_USE ||
         methodContainer.getUsage() == LazyType.PARENT && lazyTemplateData.getParentLazyType() == LazyType.MULTI_USE;
@@ -57,10 +58,10 @@ class LazyProcessorWriter {
         .replace("$NAMED", methodContainer.getNamedAnnotation()
             .map(annotation -> "@Named(" + annotation + ")")
             .orElse(""))
-        .replace("$PARAMETERS_WITHOUT_TYPE", methodContainer.getParameters().stream()
+        .replace("$PARAMETERS_WITHOUT_TYPE", parameters.stream()
             .map(x -> "_" + x.getSimpleName() + atomicInt.get())
             .collect(Collectors.joining(",")))
-        .replace("$PARAMETERS", methodContainer.getParameters().stream()
+        .replace("$PARAMETERS", parameters.stream()
             .map(x -> x.getQualifiedName() + " _" + x.getSimpleName() + atomicInt.getAndIncrement())
             .collect(Collectors.joining(",")))
         .replace("$OUTPUT_TYPE", methodContainer.getOutputType());
