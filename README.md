@@ -10,7 +10,7 @@ A Lazy/Cacheable method is a method which only executes its body once and keeps 
     <dependency>
         <groupId>io.github.askmeagain</groupId>
         <artifactId>lazygenprocessor</artifactId>
-        <version>1.0.2</version>
+        <version>1.1.0</version>
         <type>module</type>
     </dependency>
 
