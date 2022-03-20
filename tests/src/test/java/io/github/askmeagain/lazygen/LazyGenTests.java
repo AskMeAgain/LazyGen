@@ -2,12 +2,10 @@ package io.github.askmeagain.lazygen;
 
 import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
 import io.github.askmeagain.lazygen.calculator.complex.MapStructCalculatorLazy;
-import io.github.askmeagain.lazygen.calculator.simple.MapStructInterfaceLazy;
-import io.github.askmeagain.lazygen.calculator.simple.MapstructAbstractClassLazy;
-import io.github.askmeagain.lazygen.calculator.simple.NormalClassLazy;
-import io.github.askmeagain.lazygen.calculator.simple.TestNormalAbstractClass;
+import io.github.askmeagain.lazygen.calculator.simple.*;
 import io.github.askmeagain.lazygen.calculator.simple.deepabstract.TestNormalDeepDeepAbstractClass;
 import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.DuplicateClassLazy;
+import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.MultiUseDuplicateClassLazy;
 import io.github.askmeagain.lazygen.pojos.input.Input;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,6 +58,48 @@ class LazyGenTests {
   }
 
   @Test
+  void multiUseMapStructInterface() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = Mappers.getMapper(MultiUseMapStructInterfaceLazy.class);
+
+    //Act ------------------------------------------------------------------------------------
+    var result0 = lazyNormalClass.map("a");
+    var result1 = lazyNormalClass.map("a");
+    var result2 = lazyNormalClass.map("a");
+    var result3 = lazyNormalClass.map("b");
+    var result4 = lazyNormalClass.map("b");
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(2, LazyGenTestUtils.atomicInteger.get());
+    Assertions.assertEquals("a", result0.getOutput());
+    Assertions.assertEquals("a", result1.getOutput());
+    Assertions.assertEquals("a", result2.getOutput());
+    Assertions.assertEquals("b", result3.getOutput());
+    Assertions.assertEquals("b", result4.getOutput());
+  }
+
+  @Test
+  void multiUseOverrideMapStructInterface() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = Mappers.getMapper(MultiUseOverrideMapStructInterfaceLazy.class);
+
+    //Act ------------------------------------------------------------------------------------
+    var result0 = lazyNormalClass.map("a");
+    var result1 = lazyNormalClass.map("a");
+    var result2 = lazyNormalClass.map("a");
+    var result3 = lazyNormalClass.map("b");
+    var result4 = lazyNormalClass.map("b");
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(2, LazyGenTestUtils.atomicInteger.get());
+    Assertions.assertEquals("a", result0.getOutput());
+    Assertions.assertEquals("a", result1.getOutput());
+    Assertions.assertEquals("a", result2.getOutput());
+    Assertions.assertEquals("b", result3.getOutput());
+    Assertions.assertEquals("b", result4.getOutput());
+  }
+
+  @Test
   void mapStructAbstractClass() {
     //Arrange --------------------------------------------------------------------------------
     var lazyNormalClass = Mappers.getMapper(MapstructAbstractClassLazy.class);
@@ -86,6 +126,63 @@ class LazyGenTests {
 
     //Assert ---------------------------------------------------------------------------------
     Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
+  }
+
+  @Test
+  void multiUseClassResult() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new MultiUseNormalClassLazy();
+
+    //Act ------------------------------------------------------------------------------------
+    var result0 = lazyNormalClass.abc("a");
+    var result1 = lazyNormalClass.abc("a");
+    var result2 = lazyNormalClass.abc("a");
+    var result3 = lazyNormalClass.abc("b");
+    var result4 = lazyNormalClass.abc("b");
+    var result5 = lazyNormalClass.abc("b");
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(2, LazyGenTestUtils.atomicInteger.get());
+    Assertions.assertEquals("a", result0);
+    Assertions.assertEquals("a", result1);
+    Assertions.assertEquals("a", result2);
+    Assertions.assertEquals("b", result3);
+    Assertions.assertEquals("b", result4);
+    Assertions.assertEquals("b", result5);
+  }
+
+  @Test
+  void multiUseWithSingleUseParentNormalClassResult() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new MultiUseWithSingleUseParentNormalClassLazy();
+
+    //Act ------------------------------------------------------------------------------------
+    var result0 = lazyNormalClass.singleUse("a");
+    var result1 = lazyNormalClass.singleUse("a");
+    var result2 = lazyNormalClass.singleUse("b");
+    var result3 = lazyNormalClass.singleUse("b");
+    var result4 = lazyNormalClass.singleUse("b");
+    var result5 = lazyNormalClass.singleUse("b");
+
+    var result6 = lazyNormalClass.multiUse("b");
+    var result7 = lazyNormalClass.multiUse("b");
+    var result8 = lazyNormalClass.multiUse("c");
+    var result9 = lazyNormalClass.multiUse("c");
+    var result10 = lazyNormalClass.multiUse("d");
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(4, LazyGenTestUtils.atomicInteger.get());
+    Assertions.assertEquals("a", result0);
+    Assertions.assertEquals("a", result1);
+    Assertions.assertEquals("a", result2);
+    Assertions.assertEquals("a", result3);
+    Assertions.assertEquals("a", result4);
+    Assertions.assertEquals("a", result5);
+    Assertions.assertEquals("b", result6);
+    Assertions.assertEquals("b", result7);
+    Assertions.assertEquals("c", result8);
+    Assertions.assertEquals("c", result9);
+    Assertions.assertEquals("d", result10);
   }
 
   @Test
@@ -132,5 +229,29 @@ class LazyGenTests {
 
     //Assert ---------------------------------------------------------------------------------
     Assertions.assertEquals(2, LazyGenTestUtils.atomicInteger.get());
+  }
+
+  @Test
+  void multiUseDuplicateMethod() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new MultiUseDuplicateClassLazy();
+
+    //Act ------------------------------------------------------------------------------------
+    lazyNormalClass.abc();
+    lazyNormalClass.abc();
+    lazyNormalClass.abc();
+    var result0 = lazyNormalClass.abc("a");
+    var result1 = lazyNormalClass.abc("a");
+    var result2 = lazyNormalClass.abc("b");
+    var result3 = lazyNormalClass.abc("b");
+    var result4 = lazyNormalClass.abc("c");
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(4, LazyGenTestUtils.atomicInteger.get());
+    Assertions.assertEquals("a", result0);
+    Assertions.assertEquals("a", result1);
+    Assertions.assertEquals("b", result2);
+    Assertions.assertEquals("b", result3);
+    Assertions.assertEquals("c", result4);
   }
 }

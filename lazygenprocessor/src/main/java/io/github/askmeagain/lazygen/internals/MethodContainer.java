@@ -1,5 +1,6 @@
 package io.github.askmeagain.lazygen.internals;
 
+import io.github.askmeagain.lazygen.annotation.LazyType;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Builder
 class MethodContainer {
 
+  @NonNull LazyType usage;
   @NonNull Optional<String> namedAnnotation;
   @NonNull String methodOriginClass;
   @NonNull String methodName;

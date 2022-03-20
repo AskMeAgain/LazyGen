@@ -10,12 +10,17 @@ import java.util.*;
 
 class LazyGenDataCollector {
 
-  public ArrayList<String> getImportList(String oldFullyQualifiedName) {
+  public ArrayList<String> getImportList(String oldFullyQualifiedName, boolean oneTimeUse) {
     var importList = new ArrayList<String>();
 
     importList.add(oldFullyQualifiedName);
     importList.add("org.mapstruct.Mapper");
     importList.add("org.mapstruct.Named");
+
+    if (!oneTimeUse) {
+      importList.add("java.util.Map");
+      importList.add("java.util.concurrent.ConcurrentHashMap");
+    }
 
     return importList;
   }
@@ -40,6 +45,7 @@ class LazyGenDataCollector {
         .findFirst();
 
     return MethodContainer.builder()
+        .usage(lazyMethod.getAnnotation(LazyGen.class).usage())
         .methodName(lazyMethod.getSimpleName().toString())
         .methodOriginClass(methodOriginClass)
         .namedAnnotation(foundNamed)

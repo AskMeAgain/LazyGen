@@ -1,5 +1,6 @@
 package io.github.askmeagain.lazygen.internals;
 
+import io.github.askmeagain.lazygen.annotation.LazyType;
 import io.github.askmeagain.lazygen.annotation.ResultType;
 import lombok.Builder;
 import lombok.NonNull;
@@ -14,6 +15,8 @@ class TemplateData {
 
   @NonNull ProcessingEnvironment processingEnv;
 
+  @NonNull LazyType parentLazyType;
+  @NonNull Boolean hasAnyMultiUsage;
   @NonNull ResultType resultType;
   @NonNull Boolean isInterface;
   @NonNull String fullyQualifiedName;

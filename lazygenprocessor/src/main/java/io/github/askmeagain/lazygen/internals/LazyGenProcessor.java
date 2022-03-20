@@ -1,6 +1,7 @@
 package io.github.askmeagain.lazygen.internals;
 
 import io.github.askmeagain.lazygen.annotation.GenerateLazyClass;
+import io.github.askmeagain.lazygen.annotation.LazyType;
 import io.github.askmeagain.lazygen.annotation.ResultType;
 import lombok.SneakyThrows;
 
@@ -47,7 +48,16 @@ public class LazyGenProcessor extends AbstractProcessor {
     var oldGeneratorName = root.getSimpleName();
     var newGeneratorName = oldGeneratorName + "Lazy";
 
+    var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root);
+    var hasMultiUsage = lazyMethods.stream()
+        .filter(x -> x.getUsage() == LazyType.MULTI_USE)
+        .findFirst()
+        .map(x -> true)
+        .orElse(realAnnotation.usage() == LazyType.MULTI_USE);
+
     return generateTemplateData(realAnnotation.value())
+        .hasAnyMultiUsage(hasMultiUsage)
+        .parentLazyType(realAnnotation.usage())
         .resultType(realAnnotation.value())
         .isInterface(ElementKind.INTERFACE == root.getKind())
         .processingEnv(processingEnv)
@@ -55,8 +65,8 @@ public class LazyGenProcessor extends AbstractProcessor {
         .packageName(dataCollector.getPackageName(elementUtils, oldFullyQualifiedName))
         .mapperName(newGeneratorName)
         .mapperInterface(oldGeneratorName.toString())
-        .lazyMethodContainers(dataCollector.getLazyMethods(roundEnv, elementUtils, root))
-        .imports(dataCollector.getImportList(oldFullyQualifiedName))
+        .lazyMethodContainers(lazyMethods)
+        .imports(dataCollector.getImportList(oldFullyQualifiedName, !hasMultiUsage))
         .build();
   }
 

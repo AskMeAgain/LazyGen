@@ -12,4 +12,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface GenerateLazyClass {
   ResultType value();
+
+  LazyType usage() default LazyType.ONE_TIME_USE;
 }
