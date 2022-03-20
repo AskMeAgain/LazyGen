@@ -2,17 +2,17 @@ package io.github.askmeagain.lazygen.calculator.complex;
 
 import io.github.askmeagain.lazygen.annotation.LazyGen;
 import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
-import io.github.askmeagain.lazygen.input.Input;
-import io.github.askmeagain.lazygen.output.Summations;
+import io.github.askmeagain.lazygen.pojos.input.Input;
+import io.github.askmeagain.lazygen.pojos.output.Summations;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 
 public interface SummationCalculator {
 
-  @Mapping(target = "a", source = "input", qualifiedByName = "a")
-  @Mapping(target = "aa", source = "input", qualifiedByName = "aa")
-  @Mapping(target = "aaaa", source = "input", qualifiedByName = "aaaa")
+  @Mapping(target = "a", source = ".", qualifiedByName = "a")
+  @Mapping(target = "aa", source = ".", qualifiedByName = "aa")
+  @Mapping(target = "aaaa", source = ".", qualifiedByName = "aaaa")
   Summations mapSummations(Input input);
 
   MapStructCalculator getTestCalculator();

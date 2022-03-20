@@ -8,7 +8,7 @@ import io.github.askmeagain.lazygen.calculator.simple.NormalClassLazy;
 import io.github.askmeagain.lazygen.calculator.simple.TestNormalAbstractClass;
 import io.github.askmeagain.lazygen.calculator.simple.deepabstract.TestNormalDeepDeepAbstractClass;
 import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.DuplicateClassLazy;
-import io.github.askmeagain.lazygen.input.Input;
+import io.github.askmeagain.lazygen.pojos.input.Input;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

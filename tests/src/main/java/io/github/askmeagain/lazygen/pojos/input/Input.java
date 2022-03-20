@@ -1,4 +1,4 @@
-package io.github.askmeagain.lazygen.input;
+package io.github.askmeagain.lazygen.pojos.input;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -4,7 +4,7 @@ import io.github.askmeagain.lazygen.annotation.GenerateLazyClass;
 import io.github.askmeagain.lazygen.annotation.LazyGen;
 import io.github.askmeagain.lazygen.annotation.ResultType;
 import io.github.askmeagain.lazygen.calculator.LazyGenTestUtils;
-import io.github.askmeagain.lazygen.output.Outputs;
+import io.github.askmeagain.lazygen.pojos.output.Outputs;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
