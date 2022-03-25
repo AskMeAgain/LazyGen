@@ -23,6 +23,9 @@ dependencies {
 
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
 
+    //testImplementation "org.assertj:assertj-core:3.22.0"
+
+
     annotationProcessor project(':lazygenprocessor')
     implementation project(':lazygenprocessor')
 //    annotationProcessor "io.github.askmeagain:lazygenprocessor:1.1.0"

@@ -30,7 +30,7 @@ class LazyProcessorWriter {
         .replace("$CLASS_INTERFACE", lazyTemplateData.getClassInterface())
         .replace("$MULTI_USE_HELPER", lazyTemplateData.getHasAnyMultiUsage() ? LazyGenTemplates.HELPER_METHOD_MULTI_USE_TEMPLATE : "")
         .replace("$EXTENDS_IMPLEMENTS", lazyTemplateData.getIsInterface() ? "implements" : "extends")
-        .replace("$MAPSTRUCT", lazyTemplateData.getMapStructMapperTemplate() ? "@Mapper" : "")
+        .replace("$MAPSTRUCT", lazyTemplateData.getMapStructAnnotation() ? "@Mapper" : "")
         .replace("$MAPPER_NAME", lazyTemplateData.getMapperName())
         .replace("$PACKAGE", lazyTemplateData.getPackageName())
         .replace("$MAPPER_INTERFACE", lazyTemplateData.getMapperInterface())

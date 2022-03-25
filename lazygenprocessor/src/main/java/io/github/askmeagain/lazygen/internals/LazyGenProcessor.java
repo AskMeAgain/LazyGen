@@ -72,15 +72,15 @@ public class LazyGenProcessor extends AbstractProcessor {
 
   private static TemplateData.TemplateDataBuilder generateTemplateData(ResultType resultType) {
     return switch (resultType) {
-      case ABSTRACT_CLASS -> TemplateData.builder()
+      case ABSTRACT_CLASS, MAPSTRUCT_COMPATIBLE_WITHOUT_ANNOTATION -> TemplateData.builder()
           .classInterface("abstract class ")
-          .mapStructMapperTemplate(false);
+          .mapStructAnnotation(false);
       case CLASS -> TemplateData.builder()
           .classInterface("class ")
-          .mapStructMapperTemplate(false);
+          .mapStructAnnotation(false);
       case MAPSTRUCT_COMPATIBLE -> TemplateData.builder()
           .classInterface("abstract class ")
-          .mapStructMapperTemplate(true);
+          .mapStructAnnotation(true);
     };
   }
 }

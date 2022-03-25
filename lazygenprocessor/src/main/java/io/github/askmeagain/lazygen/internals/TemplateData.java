@@ -24,7 +24,7 @@ class TemplateData {
   @NonNull String mapperName;
   @NonNull String mapperInterface;
   @NonNull String classInterface;
-  @NonNull Boolean mapStructMapperTemplate;
+  @NonNull Boolean mapStructAnnotation;
 
   @NonNull List<MethodContainer> lazyMethodContainers;
   @NonNull List<String> imports;
