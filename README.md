@@ -7,8 +7,8 @@ Note: A Lazy/Cacheable method is a method which only executes its body once and 
 
 ## Gradle
 
-    annotationProcessor 'io.github.askmeagain:lazygenprocessor:1.2.0'
-    implementation 'io.github.askmeagain:lazygenprocessor:1.2.0'
+    annotationProcessor 'io.github.askmeagain:lazygenprocessor:1.2.1'
+    implementation 'io.github.askmeagain:lazygenprocessor:1.2.1'
 
 ## Getting Started
 
