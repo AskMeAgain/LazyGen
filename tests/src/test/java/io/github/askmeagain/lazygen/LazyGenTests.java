@@ -300,13 +300,19 @@ class LazyGenTests {
     var result2 = lazyNormalClass.testPrimitive2(2, 2);
     var result3 = lazyNormalClass.testPrimitive2(2, 2);
     var result4 = lazyNormalClass.testPrimitive2(3, 3);
+    var result5 = lazyNormalClass.testPrimitive2(3, 4);
+    var result6 = lazyNormalClass.testPrimitive2(3, 4);
+    var result7 = lazyNormalClass.testPrimitive2(3, 4);
 
     //Assert ---------------------------------------------------------------------------------
-    Assertions.assertEquals(4, LazyGenTestUtils.atomicInteger.get());
+    Assertions.assertEquals(5, LazyGenTestUtils.atomicInteger.get());
     Assertions.assertEquals(1, result0);
     Assertions.assertEquals(1, result1);
     Assertions.assertEquals(2, result2);
     Assertions.assertEquals(2, result3);
     Assertions.assertEquals(3, result4);
+    Assertions.assertEquals(3, result5);
+    Assertions.assertEquals(3, result6);
+    Assertions.assertEquals(3, result7);
   }
 }
