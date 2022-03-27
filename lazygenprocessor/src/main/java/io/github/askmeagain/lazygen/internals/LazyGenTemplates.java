@@ -31,10 +31,26 @@ class LazyGenTemplates {
         
       """;
 
+  public static String PRIMITIVE_ONE_TIME_USE_METHOD_TEMPLATE = """
+        $NAMED
+        @Override
+        public $OUTPUT_TYPE_ORIGINAL $METHOD_NAME($PARAMETERS) {
+          if (_flag$LAZY_FIELD_NAME) {
+            return $LAZY_FIELD_NAME;
+          }
+          _flag$LAZY_FIELD_NAME = true;
+          $LAZY_FIELD_NAME = $METHOD_ORIGIN_CLASSsuper.$METHOD_NAME($PARAMETERS_WITHOUT_TYPE);
+          return $LAZY_FIELD_NAME;
+        }
+        private boolean _flag$LAZY_FIELD_NAME;
+        private $OUTPUT_TYPE $LAZY_FIELD_NAME;
+        
+      """;
+
   public static String MULTI_TIME_USE_METHOD_TEMPLATE = """
         $NAMED
         @Override
-        public $OUTPUT_TYPE $METHOD_NAME($PARAMETERS) {
+        public $OUTPUT_TYPE_ORIGINAL $METHOD_NAME($PARAMETERS) {
           var combined = lazyHelperCombine($PARAMETERS_WITHOUT_TYPE);
           if ($LAZY_FIELD_NAME.containsKey(combined)) {
             return $LAZY_FIELD_NAME.get(combined);
@@ -44,7 +60,6 @@ class LazyGenTemplates {
           return result;
         }
         private Map<java.lang.String,$OUTPUT_TYPE> $LAZY_FIELD_NAME = new ConcurrentHashMap<>();
-        
       """;
 
   public static String HELPER_METHOD_MULTI_USE_TEMPLATE = """

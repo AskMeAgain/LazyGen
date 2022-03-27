@@ -42,7 +42,7 @@ public class LazyGenProcessor extends AbstractProcessor {
   private TemplateData collectData(RoundEnvironment roundEnv, Element root) {
     var elementUtils = processingEnv.getElementUtils();
     var realAnnotation = root.getAnnotation(GenerateLazyClass.class);
-    var dataCollector = new LazyGenDataCollector();
+    var dataCollector = new LazyGenDataCollector(roundEnv, elementUtils, processingEnv.getTypeUtils());
 
     var oldFullyQualifiedName = root.toString();
     var oldGeneratorName = root.getSimpleName();
@@ -50,7 +50,7 @@ public class LazyGenProcessor extends AbstractProcessor {
 
     var resultType = realAnnotation.value();
 
-    var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root, resultType);
+    var lazyMethods = dataCollector.getLazyMethods(root, resultType);
     var hasMultiUsage = lazyMethods.stream()
         .filter(x -> x.getUsage() == LazyType.MULTI_USE)
         .findFirst()

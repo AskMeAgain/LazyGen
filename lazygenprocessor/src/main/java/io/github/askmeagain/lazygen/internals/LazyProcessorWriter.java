@@ -3,13 +3,10 @@ package io.github.askmeagain.lazygen.internals;
 import io.github.askmeagain.lazygen.annotation.LazyType;
 import lombok.SneakyThrows;
 
-import javax.lang.model.element.TypeElement;
 import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static io.github.askmeagain.lazygen.internals.LazyGenTemplates.MULTI_TIME_USE_METHOD_TEMPLATE;
-import static io.github.askmeagain.lazygen.internals.LazyGenTemplates.ONE_TIME_USE_METHOD_TEMPLATE;
+import static io.github.askmeagain.lazygen.internals.LazyGenTemplates.*;
 
 class LazyProcessorWriter {
 
@@ -43,13 +40,12 @@ class LazyProcessorWriter {
   }
 
   private static String computeMethodTemplate(MethodContainer methodContainer, TemplateData lazyTemplateData) {
-    var atomicInt = new AtomicInteger();
-    var parameters = methodContainer.getParameters();
-
     var isMultiUse = methodContainer.getUsage() == LazyType.MULTI_USE ||
         methodContainer.getUsage() == LazyType.PARENT && lazyTemplateData.getParentLazyType() == LazyType.MULTI_USE;
 
-    var template = isMultiUse ? MULTI_TIME_USE_METHOD_TEMPLATE : ONE_TIME_USE_METHOD_TEMPLATE;
+    var oneTimeTemplate = methodContainer.getPrimitive() ? PRIMITIVE_ONE_TIME_USE_METHOD_TEMPLATE : ONE_TIME_USE_METHOD_TEMPLATE;
+
+    var template = isMultiUse ? MULTI_TIME_USE_METHOD_TEMPLATE : oneTimeTemplate;
 
     return template
         .replace("$LAZY_FIELD_NAME", getLazyFieldName(methodContainer))
@@ -58,20 +54,17 @@ class LazyProcessorWriter {
         .replace("$NAMED", methodContainer.getNamedAnnotation()
             .map(annotation -> "@Named(" + annotation + ")")
             .orElse(""))
-        .replace("$PARAMETERS_WITHOUT_TYPE", parameters.stream()
-            .map(x -> "_" + x.getSimpleName() + atomicInt.get())
-            .collect(Collectors.joining(",")))
-        .replace("$PARAMETERS", parameters.stream()
-            .map(x -> x.getQualifiedName() + " _" + x.getSimpleName() + atomicInt.getAndIncrement())
-            .collect(Collectors.joining(",")))
+        .replace("$PARAMETERS_WITHOUT_TYPE", methodContainer.getParametersWithoutType()
+            .stream()
+            .collect(Collectors.joining(", ")))
+        .replace("$PARAMETERS", methodContainer.getParameters()
+            .stream()
+            .collect(Collectors.joining(", ")))
+        .replace("$OUTPUT_TYPE_ORIGINAL", methodContainer.getOutputTypeOriginal())
         .replace("$OUTPUT_TYPE", methodContainer.getOutputType());
   }
 
   private static String getLazyFieldName(MethodContainer methodContainer) {
-    var collectedTypes = methodContainer.getParameters().stream()
-        .map(TypeElement::getSimpleName)
-        .collect(Collectors.joining("_"));
-
-    return "_" + methodContainer.getMethodName() + collectedTypes;
+    return "_" + methodContainer.getMethodName() + String.join("_", methodContainer.getParametersWithoutType());
   }
 }

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import javax.lang.model.element.TypeElement;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,11 +12,14 @@ import java.util.Optional;
 @Builder
 class MethodContainer {
 
+  @NonNull Boolean primitive;
   @NonNull LazyType usage;
   @NonNull Optional<String> namedAnnotation;
   @NonNull String methodOriginClass;
   @NonNull String methodName;
   @NonNull String outputType;
-  @NonNull List<@NonNull TypeElement> parameters;
+  @NonNull String outputTypeOriginal;
+  @NonNull List<String> parameters;
+  @NonNull List<String> parametersWithoutType;
 
 }

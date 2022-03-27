@@ -6,6 +6,9 @@ import io.github.askmeagain.lazygen.calculator.simple.*;
 import io.github.askmeagain.lazygen.calculator.simple.deepabstract.TestNormalDeepDeepAbstractClass;
 import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.DuplicateClassLazy;
 import io.github.askmeagain.lazygen.calculator.simple.duplicatemethod.MultiUseDuplicateClassLazy;
+import io.github.askmeagain.lazygen.calculator.simple.primitive.PrimitiveClassLazy;
+import io.github.askmeagain.lazygen.calculator.simple.primitive.PrimitiveClassMultiUseLazy;
+import io.github.askmeagain.lazygen.calculator.simple.primitive.PrimitiveInterfaceLazy;
 import io.github.askmeagain.lazygen.pojos.input.Input;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -199,6 +202,34 @@ class LazyGenTests {
     Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
   }
 
+  @Test
+  void primitiveClass() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new PrimitiveClassLazy();
+
+    //Act ------------------------------------------------------------------------------------
+    lazyNormalClass.testPrimitive();
+    lazyNormalClass.testPrimitive();
+    lazyNormalClass.testPrimitive();
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
+  }
+
+  @Test
+  void primitiveInterface() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new PrimitiveInterfaceLazy();
+
+    //Act ------------------------------------------------------------------------------------
+    lazyNormalClass.testPrimitive();
+    lazyNormalClass.testPrimitive();
+    lazyNormalClass.testPrimitive();
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(1, LazyGenTestUtils.atomicInteger.get());
+  }
+
 
   @Test
   void abstractDeepClassResult() {
@@ -253,5 +284,29 @@ class LazyGenTests {
     Assertions.assertEquals("b", result2);
     Assertions.assertEquals("b", result3);
     Assertions.assertEquals("c", result4);
+  }
+
+  @Test
+  void multiUseDuplicateMethodPrimitive() {
+    //Arrange --------------------------------------------------------------------------------
+    var lazyNormalClass = new PrimitiveClassMultiUseLazy();
+
+    //Act ------------------------------------------------------------------------------------
+    lazyNormalClass.testPrimitive();
+    lazyNormalClass.testPrimitive();
+    lazyNormalClass.testPrimitive();
+    var result0 = lazyNormalClass.testPrimitive2(1, 1);
+    var result1 = lazyNormalClass.testPrimitive2(1, 1);
+    var result2 = lazyNormalClass.testPrimitive2(2, 2);
+    var result3 = lazyNormalClass.testPrimitive2(2, 2);
+    var result4 = lazyNormalClass.testPrimitive2(3, 3);
+
+    //Assert ---------------------------------------------------------------------------------
+    Assertions.assertEquals(4, LazyGenTestUtils.atomicInteger.get());
+    Assertions.assertEquals(1, result0);
+    Assertions.assertEquals(1, result1);
+    Assertions.assertEquals(2, result2);
+    Assertions.assertEquals(2, result3);
+    Assertions.assertEquals(3, result4);
   }
 }
