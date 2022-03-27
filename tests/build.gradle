@@ -20,7 +20,6 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_version}"
 
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
-
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
 
     //testImplementation "org.assertj:assertj-core:3.22.0"

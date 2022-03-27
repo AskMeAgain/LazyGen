@@ -3,16 +3,12 @@
 This annotation processor adds a lazy/cacheable method to any non-final method annotated with `@LazyGen` via code
 generation.
 
-A Lazy/Cacheable method is a method which only executes its body once and keeps a copy of the result in memory
+Note: A Lazy/Cacheable method is a method which only executes its body once and keeps a copy of the result in memory.
 
-## Maven Dependency
+## Gradle
 
-    <dependency>
-        <groupId>io.github.askmeagain</groupId>
-        <artifactId>lazygenprocessor</artifactId>
-        <version>1.1.0</version>
-        <type>module</type>
-    </dependency>
+    annotationProcessor 'io.github.askmeagain:lazygenprocessor:1.2.0'
+    implementation 'io.github.askmeagain:lazygenprocessor:1.2.0'
 
 ## Getting Started
 
@@ -24,6 +20,7 @@ A Lazy/Cacheable method is a method which only executes its body once and keeps 
    2. `ResultType.ABSTRACT_CLASS`: Creates an abstract class which extends/implements the interface
    3. `ResultType.MAPSTRUCT_COMPATIBLE`: Creates an abstract class, prepared correctly for usage with
       [MapStruct](https://github.com/mapstruct/mapstruct)
+   4. `ResultType.MAPSTRUCT_COMPATIBLE_WITHOUT_ANNOTATIN` is the same as step 3, but the @Mapper annotation is not added
 4. Add `@LazyGen` to any method on this class and any childs (class or interface doesnt matter)
 5. Hit build
 6. A class is generated which inherits the original class, with Lazy as suffix
@@ -37,18 +34,19 @@ You can also specify how the caching should be implemented:
   `hashCode()` of the input parameters
 * `PARENT`: default on `@LazyGen` methods, use what the `@GenerateLazyClass` specified (by default `ONE_TIME_USE`)
 
-You can specify a general usage, via `@GenerateLazyClass(usage = ONE_TIME_USE)`, but each `@LazyGen` method can override
-this behaviour by themselves.
+You can configure a general usage, via `@GenerateLazyClass(usage = ONE_TIME_USE)`, but each `@LazyGen` method can
+override this behaviour by themselves.
 
 ## Making MapStruct lazy
 
-Note: The code gen lazy override relies on the `@Named` annotation. You can only make `@Named` methods lazy for usage in
-mapstruct
-
 1. Add `@GenerateLazyClass(ResultType.MAPSTRUCT_COMPATIBLE)` to your mapstruct mapper
 2. Remove `@Mapper` annotation from your mapper
-3. Add `@LazyGen` to any `@Named` method
+3. Add `@LazyGen` to any method
 4. Get your MapStruct mapper via `Mappers.getMapper(XXXXXXLazy.class);`
+
+Note: Methods which are touched by the MapStruct annotation processor can only be made lazy if they are
+implemented/referenced via `@Named` annotation or else MapStruct cannot find the correct method since the `@Named`
+annotation is not inheritable.
 
 ## Examples
 
