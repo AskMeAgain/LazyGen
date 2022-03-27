@@ -1,6 +1,7 @@
 package io.github.askmeagain.lazygen.internals;
 
 import io.github.askmeagain.lazygen.annotation.LazyGen;
+import io.github.askmeagain.lazygen.annotation.ResultType;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -25,24 +26,20 @@ class LazyGenDataCollector {
     return importList;
   }
 
-  public List<MethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator) {
+  public List<MethodContainer> getLazyMethods(RoundEnvironment roundEnv, Elements elementUtils, Element generator, ResultType resultType) {
     var interfaces = recursivelyGetChild(elementUtils, generator);
 
     return roundEnv.getElementsAnnotatedWith(LazyGen.class).stream()
         .filter(x -> interfaces.contains(x.getEnclosingElement().toString()))
-        .map(lazyMethod -> fillMethodContainer(elementUtils, generator, lazyMethod))
+        .map(lazyMethod -> fillMethodContainer(elementUtils, generator, lazyMethod, resultType))
         .toList();
   }
 
-  public MethodContainer fillMethodContainer(Elements elementUtils, Element generator, Element lazyMethod) {
+  public MethodContainer fillMethodContainer(Elements elementUtils, Element generator, Element lazyMethod, ResultType resultType) {
     var method = ((ExecutableType) lazyMethod.asType());
     var methodOriginClass = generator.getSimpleName().toString() + ".";
 
-    var foundNamed = lazyMethod.getAnnotationMirrors().stream()
-        .map(Object::toString)
-        .filter(x -> x.startsWith("@org.mapstruct.Named"))
-        .map(x -> x.substring(x.indexOf("(") + 1, x.indexOf(")")))
-        .findFirst();
+    var foundNamed = getNamedAnnotation(lazyMethod, resultType);
 
     return MethodContainer.builder()
         .usage(lazyMethod.getAnnotation(LazyGen.class).usage())
@@ -54,6 +51,18 @@ class LazyGenDataCollector {
             .toList())
         .outputType(method.getReturnType().toString())
         .build();
+  }
+
+  private Optional<String> getNamedAnnotation(Element lazyMethod, ResultType resultType) {
+    if (!resultType.isMapStruct()) {
+      return Optional.empty();
+    }
+
+    return lazyMethod.getAnnotationMirrors().stream()
+        .map(Object::toString)
+        .filter(x -> x.startsWith("@org.mapstruct.Named"))
+        .map(x -> x.substring(x.indexOf("(") + 1, x.indexOf(")")))
+        .findFirst();
   }
 
   public Set<String> recursivelyGetChild(Elements elementUtils, Element generator) {

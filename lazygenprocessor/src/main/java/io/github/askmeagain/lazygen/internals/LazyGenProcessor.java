@@ -48,17 +48,19 @@ public class LazyGenProcessor extends AbstractProcessor {
     var oldGeneratorName = root.getSimpleName();
     var newGeneratorName = oldGeneratorName + "Lazy";
 
-    var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root);
+    var resultType = realAnnotation.value();
+
+    var lazyMethods = dataCollector.getLazyMethods(roundEnv, elementUtils, root, resultType);
     var hasMultiUsage = lazyMethods.stream()
         .filter(x -> x.getUsage() == LazyType.MULTI_USE)
         .findFirst()
         .map(x -> true)
         .orElse(realAnnotation.usage() == LazyType.MULTI_USE);
 
-    return generateTemplateData(realAnnotation.value())
+    return generateTemplateData(resultType)
         .hasAnyMultiUsage(hasMultiUsage)
         .parentLazyType(realAnnotation.usage())
-        .resultType(realAnnotation.value())
+        .resultType(resultType)
         .isInterface(ElementKind.INTERFACE == root.getKind())
         .processingEnv(processingEnv)
         .fullyQualifiedName(oldFullyQualifiedName.replace(oldGeneratorName, newGeneratorName))
